@@ -54,7 +54,7 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
 
-    'asset_url' => env('ASSET_URL', null),
+    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------
@@ -165,6 +165,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Spatie\Permission\PermissionServiceProvider::class,
 
         /*
          * Application Service Providers...
