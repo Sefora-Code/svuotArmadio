@@ -4,28 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateEmployeesTable extends Migration
+class CreateCustomersTable extends Migration
 {
     /**
      * Run the migrations.
+     * This table might be needed in future
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->dateTime('hired_on');
-            $table->dateTime('available_from')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
-            $table->unsignedBigInteger('vehicle_id');
-            $table->foreign('vehicle_id')
-                ->references('id')
-                ->on('vehicles');
             $table->timestamps();
         });
     }
@@ -37,6 +32,6 @@ class CreateEmployeesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('customers');
     }
 }
