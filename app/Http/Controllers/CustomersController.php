@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-class OrderDetailsController extends Controller
+class CustomersController extends Controller
 {
     //
 }

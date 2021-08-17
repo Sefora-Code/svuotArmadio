@@ -22,10 +22,6 @@ class CreateEmployeesTable extends Migration
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
-//             $table->unsignedBigInteger('vehicle_id');
-//             $table->foreign('vehicle_id')
-//                 ->references('id')
-//                 ->on('vehicles');
             $table->timestamps();
         });
     }
