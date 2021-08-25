@@ -32,6 +32,7 @@ class CreateEmployeeVehiclesTable extends Migration
             // quando il mezzo e' stato restituito
             $table->dateTime('returned_at')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
