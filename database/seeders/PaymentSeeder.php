@@ -25,7 +25,7 @@ class PaymentSeeder extends Seeder
             Payment::create([
                 'amount' => $faker->numberBetween(1, 100),
                 'order_id' => $order->id,
-                'payment_type_id' => rand(1, PaymentType::count())
+                'payment_type_id' => rand(1, PaymentType::class)
             ]);
         }
     }

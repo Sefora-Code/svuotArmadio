@@ -22,7 +22,7 @@ class OrderDetailSeeder extends Seeder
 
         foreach ($orders as $order) {
             OrderDetail::create([
-                'shipping_address' => $faker->address,
+                'shipping_address' => $order->customer()->user()->address,
                 'volume' => $faker->numberBetween(1, 100),
                 'notes' => $faker->text,
                 'order_id' => $order->id
