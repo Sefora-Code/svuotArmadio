@@ -17,7 +17,8 @@ class SuperAdminSeeder extends Seeder
     public function run()
     {
         $superAdmin = User::create([
-            'name' => 'Super Admin',
+            'name' => 'Super',
+            'surname' => 'Admin',
             'email' => 'super.admin@sefora.it',
             'email_verified_at' => now(),
             'password' => Hash::make('password'),

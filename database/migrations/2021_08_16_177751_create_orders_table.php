@@ -20,7 +20,7 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->foreign('customer_id')
                 ->references('id')
-                ->on('users')
+                ->on('customers')
                 ->onDelete('cascade');
             // id dell'operatore che ha creato l'ordine per conto del cliente
             $table->unsignedBigInteger('employee_id')->nullable();
