@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Vehicle;
+use App\Models\VehicleType;
+use Illuminate\Database\Seeder;
 
 class VehiclesSeeder extends Seeder
 {
@@ -14,12 +15,12 @@ class VehiclesSeeder extends Seeder
      */
     public function run()
     {
-        for ($i = 0; $i < 5; $i++) 
+        for ($i = 0; $i < 5; $i++)
         {
             Vehicle::create([
                 'bought_on' => date('Y-m-d'),
-                'vehicle_type_id' => rand(1,3)
-            ]);    
+                'vehicle_type_id' => rand(1, VehicleType::count())
+            ]);
         }
     }
 }
