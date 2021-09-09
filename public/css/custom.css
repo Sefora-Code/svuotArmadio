@@ -1,0 +1,58 @@
+body{
+    background-image: url(https://picsum.photos/seed/picsum/1920/1080);
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+div.register-box{
+    width: 600px;
+}
+
+div.register-box div.card{
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+}
+
+div.register-box div.card-body{
+    background-color: transparent;
+}
+
+div.register-box div.card-body input{
+    background-color: transparent;
+    border: 1px solid grey;
+    color: white;
+}
+
+div.register-box div.input-group-append{
+    border: 1px solid grey;
+}
+
+/* card selection registration */
+
+
+div.register-box div.card .card-img-caption{
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+}
+
+div.card-register-box div.card .card-img-caption .card-img-top{
+    z-index: 0;
+}
+
+.card-img-caption .card-text {
+    text-align: center;
+    width: 100%;
+    margin: 20% 0;
+    position: absolute;
+    z-index: 1;
+    color: black;
+  }
+
+  @media screen and (max-width: 968){
+    div.container-fluid .card{
+        display: block;
+        width: 30%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+  }
