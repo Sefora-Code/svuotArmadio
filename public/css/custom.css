@@ -55,4 +55,17 @@ div.card-register-box div.card .card-img-caption .card-img-top{
         margin-left: auto;
         margin-right: auto;
     }
-  }
+ }
+
+/* ! LOGIN STYLES */
+.login-box {
+    width: 500px;
+}
+
+.login-logo, .register-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 400;
+}
