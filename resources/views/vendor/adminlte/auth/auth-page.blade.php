@@ -16,8 +16,7 @@
 @section('classes_body'){{ ($auth_type ?? 'login') . '-page' }}@stop
 
 @section('body')
-    <div class="{{ $auth_type ?? 'login' }}-box">
-
+    <div class="{{ $auth_type ?? 'login' }}-box col-sm-12 col-md-6 col-lg-6">
         {{-- Logo --}}
         <div class="{{ $auth_type ?? 'login' }}-logo">
             <a href="{{ $dashboard_url }}">
@@ -31,11 +30,10 @@
 
         {{-- Card Box --}}
         <div class="card {{ config('adminlte.classes_auth_card', 'card-outline card-primary') }}">
-
             {{-- Card Header --}}
             @hasSection('auth_header')
                 <div class="card-header {{ config('adminlte.classes_auth_header', '') }}">
-                    <h3 class="card-title float-none text-center text-bold">
+                    <h3 class="card-title float-none text-center text-bold mb-0">
                         @yield('auth_header')
                     </h3>
                 </div>
@@ -49,13 +47,11 @@
             {{-- Card Footer --}}
             @hasSection('auth_footer')
                 <div
-                    class="card-footer d-flex justify-content-around align-items-center {{ config('adminlte.classes_auth_footer', '') }}">
+                    class="card-footer d-flex justify-content-center align-items-center {{ config('adminlte.classes_auth_footer', '') }}">
                     @yield('auth_footer')
                 </div>
             @endif
-
         </div>
-
     </div>
 @stop
 

@@ -78,7 +78,7 @@
 @section('auth_footer')
     {{-- Password reset link --}}
     @if($password_reset_url)
-        <p class="my-0">
+        <p class="my-0 mr-2">
             <a href="{{ $password_reset_url }}">
                 {{ __('adminlte::adminlte.i_forgot_my_password') }}
             </a>
@@ -89,7 +89,7 @@
 
     {{-- Register link --}}
     @if($register_url)
-        <p class="my-0">
+        <p class="my-0 ml-2">
             <a href="{{ $register_url }}">
                 {{ __('adminlte::adminlte.register_a_new_membership') }}
             </a>
