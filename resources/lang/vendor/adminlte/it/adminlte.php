@@ -20,5 +20,6 @@ return [
     'reset_password' => 'Resetta la password',
     'send_password_reset_link' => 'Invia link di reset della password',
     'phone_number' => 'Telefono',
-    'address' => 'Indirizzo'
+    'address' => 'Indirizzo',
+    'type' => 'Registrati come:'
 ];

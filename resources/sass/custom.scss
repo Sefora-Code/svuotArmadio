@@ -1,0 +1,19 @@
+/* ! GENERALS STYLES */
+html, body {
+    font-size: 16px;
+    background-color: #eee;
+    color: #333;
+}
+
+.register-box,
+.login-box {
+    padding: 0 1rem;
+}
+
+.login-logo, .register-logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 400;
+}

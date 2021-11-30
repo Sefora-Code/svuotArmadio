@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\Employee;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -67,7 +69,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data): User
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'surname' => $data['surname'],
             'email' => $data['email'],
@@ -75,5 +77,19 @@ class RegisterController extends Controller
             'phone_number' => $data['phone_number'],
             'address' => $data['address']
         ]);
+
+        $type = $data['type'];
+
+        if ($type == 'customer') {
+            $user->assignRole(['customer']);
+
+            Customer::create(['user_id' => $user->id]);
+        } else if ($type == 'deliverer') {
+            $user->assignRole(['deliverer']);
+
+            Employee::create(['hired_on' => now(), 'user_id' => $user->id]);
+        }
+
+        return $user;
     }
 }
