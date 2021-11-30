@@ -5,10 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -30,5 +32,10 @@ class Order extends Model
     public function assignedBy(): BelongsTo
     {
         return $this->belongsTo(Employee::class, 'assigned_by');
+    }
+    
+    public function orderDetails(): HasOne
+    {
+        return $this->hasOne(OrderDetail::class);
     }
 }

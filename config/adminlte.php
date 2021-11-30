@@ -255,6 +255,11 @@ return [
         ],
         ['header' => 'account_settings'],
         [
+            'text' => 'show_orders',
+            'url'  => 'orders',
+            'icon' => 'fas fa-fw fa-user',
+        ],
+        [
             'text' => 'profile',
             'url'  => 'admin/settings',
             'icon' => 'fas fa-fw fa-user',

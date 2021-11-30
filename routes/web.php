@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrdersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,3 +22,8 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::get('/orders', [OrdersController::class, 'index'])->name('orders');
+    
+Route::post('/assign-order', [OrdersController::class, 'assign'])->name('order.assign');
+Route::post('/accept-order', [OrdersController::class, 'accept'])->name('order.accept');
+Route::post('/reject-order', [OrdersController::class, 'reject'])->name('order.reject');

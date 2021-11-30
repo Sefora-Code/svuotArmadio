@@ -16,4 +16,5 @@ return [
     'important'                     => 'Important',
     'warning'                       => 'Warning',
     'information'                   => 'Information',
+    'show_orders'                   => 'Mostra ordini',
 ];
