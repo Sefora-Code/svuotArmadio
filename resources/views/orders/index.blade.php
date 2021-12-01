@@ -13,6 +13,59 @@
 
 @section('content')
 
+<div class="text-right mb-4 p-3" style="background-color: white;">
+	<button class="btn btn-primary" onclick="showOrderUI();">Inserisci nuovo ordine</button>
+
+	<div id="addOrder" class="mt-2 text-left d-none">
+		<form method="post" action="{{route('store.order')}}">
+			<div class="input-group mb-3">
+			
+		  		<div class="input-group-prepend">
+		    		<label class="input-group-text" for="userSelect">Cliente</label>
+		  		</div>
+		  		<select class="custom-select" id="userSelect" aria-label="userSelect" name="customer" required>
+				    <option selected></option>
+               		@foreach($customers as $customer)
+                   		<option value="{{$customer->id}}">
+                   			{{$customer->user->name.' '.$customer->user->surname}}
+                   		</option>
+                    @endforeach>
+		  		</select>
+			</div>
+		
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="volumeLabel">Volume</span>
+			  	</div>
+			  	<input type="number" class="form-control" name="volume" aria-describedby="volumeLabel" placeholder="solo valori interi" required>
+			</div>
+		
+		
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="basic-addon3">Data ritiro</span>
+			  	</div>
+			  	<input type="date" class="form-control" name="date" aria-describedby="basic-addon3" required>
+			</div>
+		
+		
+			<div class="input-group mb-3">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text">Note</span>
+			  </div>
+			  <textarea class="form-control" aria-label="Note"></textarea>
+			</div>
+
+			@csrf
+			<button class="btn btn-success">Salva ordine</button>
+		
+		</form>
+	</div>
+</div>
+
+
+
+
 <table id="ordersTable" class="display">
     <thead>
         <tr>
@@ -39,20 +92,20 @@
 				<td>{{ $order->employee ? $order->employee->user->name.' '.$order->employee->user->surname : '-'}}</td>
 				<td>{{ $order->orderDetails->notes }}</td>
 				<td>
-					<button class="btn btn-flat" onclick="showAssignEmployee(this)">Assegna</button>
+					<button class="btn btn-success mb-2" onclick="accept('{{$order->id}}')">Accetta</button>
+					<button class="btn btn-warning mb-2" onclick="reject('{{$order->id}}')">Rifiuta</button>
+					<button class="btn btn-info mb-2" onclick="showAssignEmployee(this)">Assegna</button>
 					<span class="d-none">
-    					<select>
-    						<option></option>
+    					<select class="mb-2">
+    						<option selected></option>
                     		@foreach($employees as $employee)
                         		<option value="{{$employee->id}}">
                         			{{$employee->user->name.' '.$employee->user->surname}}
                         		</option>
                             @endforeach>
     					</select>
-						<button class="btn" onclick="confirmEmployee(this, '{{$order->id}}')">Conferma</button>
+						<button class="btn btn-success" onclick="confirmEmployee(this, '{{$order->id}}')">Conferma</button>
 					</span>
-					<button class="btn" onclick="accept('{{$order->id}}')">Accetta</button>
-					<button class="btn" onclick="reject('{{$order->id}}')">Rifiuta</button>
 				</td>
 	        </tr>
         @endforeach
@@ -72,6 +125,11 @@
     {
         $('#ordersTable').DataTable();
     });
+    
+    function showOrderUI()
+    {
+    	$("#addOrder").removeClass("d-none");
+    }
     
     function showAssignEmployee(element)
     {

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Employee;
+use App\Models\Customer;
 
 class OrdersController extends Controller
 {
@@ -30,7 +31,8 @@ class OrdersController extends Controller
     {
         $orders = Order::get();
         $employees = Employee::get();
-        return view('orders.index', compact('orders', 'employees'));
+        $customers = Customer::get();
+        return view('orders.index', compact('orders', 'employees', 'customers'));
     }
 
     public function accept(Request $request)
@@ -77,13 +79,53 @@ class OrdersController extends Controller
         return $toReturn;
     }
     
-    public function storeOrder(Request $request)
+    public function storeAdminOrder(Request $request)
+    {
+        if (!$request->has('customer'))
+        {
+            return redirect()->back()->with('error', 'Cliente Mancante!');
+        }
+        else if (!$request->has('volume'))
+        {
+            return redirect()->back()->with('error', 'Volume Mancante!');
+        }
+        else if (!$request->has('date'))
+        {
+            return redirect()->back()->with('error', 'Data di ritiro mancante');
+        }
+        else
+        {
+            $customer = Customer::find($request->customer);
+            $order = new Order();
+            $order->fullfilled = 0;
+            $order->customer_id = $request->customer;
+            $order->save();
+            
+            $orderDetails = new OrderDetail();
+            $orderDetails->order_id = $order->id;
+            $orderDetails->shipping_address = $customer->user->address;
+            $orderDetails->pickup_date = $request->date;
+            $orderDetails->volume = $request->volume;
+            if ($request->has('notes')) // not mandatory
+                $orderDetails->notes = $request->notes;
+            $orderDetails->save();
+        }
+        
+        return redirect()->back()->with('success', 'Ritiro salvato correttamente');
+    }
+
+    
+    public function storeCustomerOrder(Request $request)
     {
         $toReturn = new \stdClass();
         $toReturn->error = "";
         $toReturn->message = "";
         
-        if (!$request->has('volume'))
+        if (!$request->has('customer'))
+        {
+            $toReturn->error = "Cliente mancante";
+        }
+        else if (!$request->has('volume'))
         {
             $toReturn->error = "Volume mancante";
         }
@@ -96,7 +138,7 @@ class OrdersController extends Controller
             $user = Auth::user(); // the customer
             $order = new Order();
             $order->fullfilled = 0;
-            $order->customer_id = $user->customer->id;
+            $order->customer_id = $request->customer;
             $order->save();
             
             $orderDetails = new OrderDetail();
@@ -106,11 +148,14 @@ class OrdersController extends Controller
             $orderDetails->volume = $request->volume;
             if ($request->has('notes')) // not mandatory
                 $orderDetails->notes = $request->notes;
-            $orderDetails->save();
-
-            $toReturn->message = "Ritiro prenotato correttamente.";
+                $orderDetails->save();
+                
+                $toReturn->message = "Ritiro prenotato correttamente.";
         }
         
-        return json_encode($toReturn);        
+        return redirect()
+        ->back()
+        ->with('success', 'Your message has been sent successfully!');
     }
+    
 }

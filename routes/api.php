@@ -21,5 +21,5 @@ Route::middleware('auth:api')->group(function ()
         return $request->user();
     });
     
-    Route::post('/store_order', [OrdersController::class, 'storeOrder'])->name('store.order'); // post['volume'], post['date'], post['notes']
+    Route::post('/store_order', [OrdersController::class, 'storeCustomerOrder'])->name('store.order'); // post['volume'], post['date'], post['notes']
 });

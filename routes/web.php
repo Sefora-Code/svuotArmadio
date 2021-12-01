@@ -27,3 +27,4 @@ Route::get('/orders', [OrdersController::class, 'index'])->name('orders');
 Route::post('/assign-order', [OrdersController::class, 'assign'])->name('order.assign');
 Route::post('/accept-order', [OrdersController::class, 'accept'])->name('order.accept');
 Route::post('/reject-order', [OrdersController::class, 'reject'])->name('order.reject');
+Route::post('/store-order', [OrdersController::class, 'storeAdminOrder'])->name('store.order');
