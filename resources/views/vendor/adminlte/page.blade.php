@@ -4,6 +4,7 @@
 
 @section('adminlte_css')
     <style>
+        /* alert messages from server */
         .server-alerts{position: fixed !important; z-index: 10000; right: 20px; top: 20px;}
     </style>
     @stack('css')
