@@ -255,6 +255,17 @@ return [
         ],
         ['header' => 'account_settings'],
         [
+            'text'    => 'Utenti',
+            'icon'    => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'lista',
+                    'url'  => 'users',
+                ],
+                ],
+            
+        ],
+        [
             'text' => 'show_orders',
             'url'  => 'orders',
             'icon' => 'fas fa-fw fa-user',

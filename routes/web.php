@@ -3,6 +3,7 @@
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\UsersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,7 @@ Route::get('/', function () {
 });
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+Route::resource('/users', UsersController::class);
 Route::get('/orders', [OrdersController::class, 'index'])->name('orders');
     
 Route::post('/assign-order', [OrdersController::class, 'assign'])->name('order.assign');
