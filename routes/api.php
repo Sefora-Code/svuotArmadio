@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\OrdersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function () 
+{
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    
+    Route::post('/store_order', [OrdersController::class, 'storeCustomerOrder'])->name('store.order'); // post['volume'], post['date'], post['notes']
 });

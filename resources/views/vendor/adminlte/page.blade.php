@@ -3,6 +3,9 @@
 @inject('layoutHelper', 'JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper')
 
 @section('adminlte_css')
+    <style>
+        .server-alerts{position: fixed !important; z-index: 10000; right: 20px; top: 20px;}
+    </style>
     @stack('css')
     @yield('css')
 @stop
@@ -13,6 +16,19 @@
 
 @section('body')
     <div class="wrapper">
+
+        @if(Session::has('success'))
+		<div class="server-alerts alert alert-success alert-dismissible fade show" role="alert">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              {!! session('success')!!}.
+		 </div>
+        @endif
+        @if(Session::has('error'))
+		<div class="server-alerts alert alert-danger alert-dismissible fade show" role="alert">
+              <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+              {!! session('error')!!}.
+		 </div>
+        @endif
 
         {{-- Top Navbar --}}
         @if($layoutHelper->isLayoutTopnavEnabled())
