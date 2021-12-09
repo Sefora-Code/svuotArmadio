@@ -1,0 +1,108 @@
+/* main menu */
+
+div.menu-user-main{
+	margin-top: 1%;
+	background-color: #112FC4;
+}
+
+div.menu-user-main div.col-lg-4{
+	padding-top: 30px;
+	padding-bottom: 30px;
+	text-align: center;
+}
+
+div.menu-user-main a{
+	color: white;
+	text-decoration: none;
+}
+
+/* Personal info */
+
+div.info-personali{
+	padding-top: 10px;
+}
+
+div.info-personali h1{
+	text-align: center;
+}
+
+div.info-personali img{
+	border-radius: 100%;
+}
+
+div.info-personali div.credentials{
+	margin-left: 10px;
+}
+
+/* pick up reservation /*
+{
+	
+}
+/* steps */
+
+div.prenotazione-ritiro div.steps a{
+	color: white;
+	text-decoration: none;
+}
+
+/* content */
+
+div.prenotazione-ritiro div.ritiro h1{
+	text-align: center;
+}
+
+div.prenotazione-ritiro div.ritiro div.row{
+	margin-top: 20px;
+}
+
+div.prenotazione-ritiro div.riepilogo h1{
+	text-align: center;
+}
+
+div.prenotazione-ritiro div.riepilogo div.dati{
+	margin-top: 20px;
+}
+
+
+div.prenotazione-ritiro div.riepilogo div.edit{
+	margin-top:  40px;
+}
+
+div.prenotazione-ritiro div.pagamento div.row h1{
+	text-align: center;
+}
+
+div.prenotazione-ritiro div.pagamento div.dati{
+	margin-top: 20px;
+}
+
+/* pick up history */
+
+div.storico-ritiri div.title{
+	margin-top: 20px;
+}
+
+div.storico-ritiri div.row h1{
+	text-align: center;
+}
+
+div.storico-ritiri table{
+	margin-top: 20px;
+}
+
+div.storico-ritiri table a{
+	text-decoration: none;
+	color: black;
+}
+
+/* pick up history details */
+
+div.dettagli-ritiro div.title{
+	margin-top: 20px;
+}
+
+div.dettagli-ritiro div.row h1{
+	text-align: center;
+}
+
+
