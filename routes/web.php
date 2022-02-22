@@ -24,4 +24,6 @@ Route::get('/', function () {
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/customers/info', [CustomersController::class, 'index'])->name('informations');
 
-Route::get('/front-index', [FrontPageController::class, 'index'])->name('front-index');
+Route::get('/front-home', [FrontPageController::class, 'index'])->name('front-home');
+Route::get('/bookings-home', [FrontPageController::class, 'bookingsHome'])->name('bookings-home');
+Route::get('/pickups-home', [FrontPageController::class, 'pickupsHome'])->name('pickups-home');
