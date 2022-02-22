@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FrontPageController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,3 +23,5 @@ Route::get('/', function () {
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/customers/info', [CustomersController::class, 'index'])->name('informations');
+
+Route::get('/front-index', [FrontPageController::class, 'index'])->name('front-index');

@@ -37,4 +37,20 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+    
+    /**
+     * add logic to proxy users to the right page after login
+     * @return string
+     */
+    public function redirectTo()
+    {
+        $for = [
+            'super-admin' => RouteServiceProvider::HOME,
+            'admin' => RouteServiceProvider::HOME,
+            'deliverer'  => RouteServiceProvider::FRONT_HOME,
+            'customer'  => RouteServiceProvider::FRONT_HOME
+        ];
+        return $this->redirectTo = $for[auth()->user()->getRoleNames()->first()];
+    }
+    
 }
