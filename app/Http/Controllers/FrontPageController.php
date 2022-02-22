@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth\LoginController;
 
 class FrontPageController extends Controller
 {
@@ -24,6 +25,16 @@ class FrontPageController extends Controller
      */
     public function index(): Renderable
     {
-        return view('front.index');
+        return view('front.home');
+    }
+    
+    public function bookingsHome()
+    {
+        return view('front.bookings.home');
+    }
+    
+    public function pickupsHome() 
+    {
+        return view('front.pickups.home');
     }
 }

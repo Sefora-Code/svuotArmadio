@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\Support\Renderable;
+use App\Http\Controllers\Auth\LoginController;
 
 class HomeController extends Controller
 {
@@ -22,7 +23,13 @@ class HomeController extends Controller
      * @return Renderable
      */
     public function index(): Renderable
-    {
-        return view('home');
+    { 
+        $for = [
+            'super-admin' => 'home',
+            'admin' => 'home',
+            'deliverer'  => 'front.home',
+            'customer'  => 'front.home'
+        ];
+        return view($for[auth()->user()->getRoleNames()->first()]);
     }
 }
