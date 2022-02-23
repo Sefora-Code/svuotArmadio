@@ -105,10 +105,17 @@ class OrdersController extends Controller
         //
     }
     
+    public function showDetail($id)
+    {
+        $order = Order::where('id', $id)->with('orderDetail')->first();
+        return view('front.pickups.pickup-details', compact('order'));
+    }
+    
     
     public function paymentPage($id)
     {
         $newOrderDetail = OrderDetail::find($id);
         return view('front.orders.payment', compact('newOrderDetail'));
     }
+    
 }

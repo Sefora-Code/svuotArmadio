@@ -18,9 +18,9 @@
 				<tbody>
 				@foreach($orders as $order)
 					<tr>
-						<th scope="row"><a href="dettagli-ritiro.html">{{$order->id}}</a></th>
+						<th scope="row"><a href="{{route('pickups-detail', $order->id)}}">{{$order->id}}</a></th>
 						<td>{{ date("d / m / Y", strtotime($order->created_at)) }}</td>
-						<td>{{ date("d / m / Y", strtotime($order->orderDetail->pickup_date)) }} - {{ $order->orderDetail->time_frame }}</td>
+						<td>{{ date("d / m / Y", strtotime($order->orderDetail->pickup_date)) }}</td>
 						<td>{{ $order->orderDetail->shipping_address }}</td>
 						<td>{{ $order->fulfilled ? "Completato" : "Accettato" }}</td>
 					</tr>

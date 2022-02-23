@@ -37,3 +37,4 @@ Route::post('/update-order/{id}', [OrdersController::class, 'update'])->name('up
 Route::get('/payment-order/{id}', [OrdersController::class, 'paymentPage'])->name('payment-order');
 
 Route::get('/pickups-home', [FrontPageController::class, 'pickupsHome'])->name('pickups-home');
+Route::get('/pickups-detail/{id}', [OrdersController::class, 'showDetail'])->name('pickups-detail');
