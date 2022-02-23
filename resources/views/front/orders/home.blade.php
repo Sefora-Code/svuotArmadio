@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Area utenti</title>
-	<link rel="stylesheet" href="../assets/css/style.css">
-	<!-- steps css -->
-	<link rel="stylesheet" href="../assets/css/steps.css">
-	<!-- bootstrap -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-</head>
-<body>
-	<div class="container">
-		<div class="row menu-user-main h-10">
-			<div class="col-lg-4"> <a href="../index.html"> Informazioni Personali </a></div>
-			<div class="col-lg-4"> <a href="index.html"> Prenotazione ritiro </a></div>
-			<div class="col-lg-4"> <a href="../ritiri/storico-ritiri.html"> Storico ritiri </a></div>
-		</div>
+@extends('front.master')
+
+@section('title'){{ __('front.title_home') }}@stop
+
+@section('body')
+
 		<div class="row prenotazione-ritiro">
 			<div class="row steps">
 				<div class="progress">
@@ -31,38 +18,39 @@
 					</div>
 				</div>
 				<div class="row ritiro">
-					<form method="post" action="">
+					<form method="post" action="{{isset($newOrderDetail) ? route('update-order', $newOrderDetail->id) : route('new-order')}}">
+				    @csrf
 						<div class="row">
 							<h1> Prenota un ritiro </h1>
 						</div>
 						<div class="col-lg-12">
 							<div class="row">
 								<div class="col"><label for="address"> Indirizzo </label></div>
-								<div class="col"><input type="text" name="address" id="address" class="form-control" placeholder="Indirizzo" value="Via Penelope 40, Parma (PR) 43030" /></div>
+								<div class="col"><input type="text" name="shipping_address" id="address" class="form-control" placeholder="Indirizzo" value="{{ isset($newOrderDetail) ? $newOrderDetail->shipping_adress : $thisUser->address }}" required="required" /></div>
 							</div>
 							<hr />
 							<div class="row">
 								<div class="col"><label for="date"> Data </label></div>
-								<div class="col"><input type="date" name="date" id="date" class="form-control" placeholder="Seleziona una data" /></div>
+								<div class="col"><input type="date" name="date" id="date" class="form-control" placeholder="Seleziona una data"  required="required" value="{{ isset($newOrderDetail) ? date('d/m/Y', strtotime($newOrderDetail->pickup_date)) : '' }}"/></div>
 							</div>
 							<hr />
 							<div class="row">
 								<div class="col"><label for="range-time"> Range Orario </label></div>
 								<div class="col">
 									<div class="form-check" id="range-time">
-										<input class="form-check-input" type="radio" name="range-time" id="first-range" value="morning" />
+										<input class="form-check-input" type="radio" name="range_time" id="first-range" value="mattina" {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "mattina" ? "checked" : "" }}/>
 										<label class="form-check-label" for="first-range">
 											Mattino
 										</label>
 									</div>
 									<div class="form-check" id="range-time">
-										<input class="form-check-input" type="radio" name="range-time" id="second-range" value="afternoon" />
+										<input class="form-check-input" type="radio" name="range_time" id="second-range" value="pomeriggio"  {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "pomeriggio" ? "checked" : "" }} />
 										<label class="form-check-label" for="second-range">
 											Pomeriggio
 										</label>
 									</div>
 									<div class="form-check" id="range-time">
-										<input class="form-check-input" type="radio" name="range-time" id="third-range" value="evening" />
+										<input class="form-check-input" type="radio" name="range_time" id="third-range" value="sera"  {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "sera" ? "checked" : "" }} />
 										<label class="form-check-label" for="third-range">
 											Sera
 										</label>
@@ -70,25 +58,24 @@
 								</div>
 							</div>
 							<hr />
-							<div class="row">
+							<!--div class="row">
 								<div class="col"><label for="range-weight"> Range Peso </label></div>
 								<div class="col">
 									<select class="form-control" name="range-weight" id="range-weight">
 										<option value="default"> Seleziona il peso </option>
-										<option value="1-5"> 1-5 Kg </option>
-										<option value="5-10"> 5-10 Kg </option>
-										<!-- Add more range .... -->
+										<option value="5"> 1-5 Kg </option>
+										<option value="10"> 5-10 Kg </option>
 									</select>
 								</div>
 							</div>
-							<hr />
+							<hr /-->
 							<div class="row">
 								<div class="col"><label for="range-volume"> Range volume </label></div>
 								<div class="col">
-									<select class="form-control" id="range-volume" name="range-volume">
+									<select class="form-control" id="range-volume" name="range_volume" required="required">
 										<option value="default"> Seleziona il volume </option>
-										<option value="1-2"> 1 - 2 Sacchetti </option>
-										<option value="2-4"> 2 - 4 Sacchetti </option>
+										<option value="2" {{ isset($newOrderDetail) && $newOrderDetail->volume == 2 ? "selected" : "" }} > 1 - 2 Sacchetti </option>
+										<option value="4" {{ isset($newOrderDetail) && $newOrderDetail->volume == 4 ? "selected" : "" }} > 2 - 4 Sacchetti </option>
 										<!-- Add more volume range ..... -->
 									</select>
 								</div>
@@ -98,11 +85,4 @@
 					</form>
 				</div>
 			</div>
-		</div>
-	</div>
-
-
-	<!-- footer -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-</body>
-</html>
+@endsection		

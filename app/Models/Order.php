@@ -31,4 +31,9 @@ class Order extends Model
     {
         return $this->belongsTo(Employee::class, 'assigned_by');
     }
+    
+    public function orderDetail()
+    {
+        return $this->hasOne(OrderDetail::class, 'order_id');
+    }
 }
