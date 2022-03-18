@@ -46,7 +46,7 @@ class FrontPageController extends Controller
     public function pickupsHome() 
     {
         $thisCustomerId = Customer::where('user_id', Auth::user()->id)->pluck('id')->first();
-        $orders = Order::where('customer_id', $thisCustomerId)->with('orderDetail')->orderByDesc('id')->get();
+        $orders = Order::where('customer_id', $thisCustomerId)->with('orderDetails')->orderByDesc('id')->get();
         return view('front.pickups.home', compact('orders'));
     }
 }

@@ -6,13 +6,10 @@ use App\Models\User;
 use App\Models\Employee;
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\View;
-
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -207,7 +204,7 @@ class UsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update_denis_branch(Request $request)
     {
         $thisUser = Auth::user();
         // check that the user is not trying to modify someone else's data

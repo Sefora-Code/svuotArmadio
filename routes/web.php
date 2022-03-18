@@ -4,7 +4,6 @@ use App\Http\Controllers\FrontPageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrdersController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\UsersController;
 
 /*

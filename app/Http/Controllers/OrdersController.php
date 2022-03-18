@@ -10,12 +10,6 @@ use App\Models\OrderDetail;
 use App\Models\Employee;
 use App\Models\Customer;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Models\Order;
-use App\Models\OrderDetail;
-use App\Models\Customer;
-
 class OrdersController extends Controller
 {
     /** 
@@ -32,6 +26,16 @@ class OrdersController extends Controller
      * 
     */
     
+    
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index_denis_branch()
+    {
+        return view('front.pickups.home');
+    }
     
     public function index()
     {
@@ -162,17 +166,6 @@ class OrdersController extends Controller
         return redirect()
         ->back()
         ->with('success', 'Your message has been sent successfully!');
-    }
-    
-    
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('front.pickups.home');
     }
     
     
