@@ -20,7 +20,7 @@
         {{-- Logo --}}
         <div class="{{ $auth_type ?? 'login' }}-logo">
             <a href="{{ $dashboard_url }}">
-                <img src="{{ asset(config('adminlte.logo_img')) }}" class="img-fluid" width="200"/>
+                <img src="{{ asset(config('adminlte.logo_img')) }}" class="img-fluid" width="100"/>&nbsp;
             </a>
 
             <p class="m-0">
