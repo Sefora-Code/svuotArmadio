@@ -9,15 +9,17 @@
 			<div class="col-lg-4">
 				<img src="https://picsum.photos/300/300" class="img-thumbnail">
 			</div>
-			<div class="col-lg-8">
+			<div class="col-lg-8 mt-5">
 				<form method="post" action="{{route('save-user-data')}}">
 				    @csrf
 					<div class="credentials">
 						<h3> Informazioni di recapito </h3>
 						<input type="text" name="address" id="address" class="form-control" placeholder="Indirizzo" value="{{ $thisUser->address }}" />
+						<br><br>
 						<hr />
+						<br><br>
 						<h3> Informazioni di contatto </h3>
-						<div class="row">
+						<div class="row mt-3 mb-3">
 							<div class="col">
 								<label for="number"> Numero di telefono </label>
 								<input type="number" name="phone" id="phone" class="form-control" placeholder="Numero di telefono" value="{{ $thisUser->phone_number }}" maxlength="10" />
@@ -31,7 +33,8 @@
 						<input type="password" name="pwd" id="pwd" class="form-control" placeholder="Password account" />
 						<small> Ultima modifica: 3 mesi fa </small>
 
-
+						
+						<br><br><br><br>
 						<div class="row"><button type="submit" class="btn btn-primary mx-auto w-50" name="save" id="save"> Salva </button></div>
 					</div>
 
@@ -39,5 +42,5 @@
 				</form>
 			</div>
 		</div>
-		
+				
 @endsection		

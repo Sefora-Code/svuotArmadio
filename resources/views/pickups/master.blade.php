@@ -54,6 +54,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cookie&family=Fredoka&display=swap" rel="stylesheet"> 
     
+    
+    {{-- Custom Header Scripts --}}
+    @yield('custom_head_js')
 </head>
 
 <body @yield('body_data')>
@@ -81,9 +84,8 @@
             </button>
 			<div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
 				<ul class="navbar-nav">
-					<li class="nav-item"><a class="nav-link {{Route::is('front-home') ? 'active' : ''}}" aria-current="page" href="{{route('front-home')}}"> Informazioni Personali </a></li>
-					<li class="nav-item"><a class="nav-link {{Route::is('orders-home') ? 'active' : ''}}" href="{{route('orders-home')}}"> Prenotazione ritiro </a></li>
-					<li class="nav-item"><a class="nav-link {{Route::is('pickups-home') ? 'active' : ''}}" href="{{route('pickups-home')}}"> Storico ritiri </a></li>
+					<li class="nav-item"><a class="nav-link {{Route::is('front-home') ? 'active' : ''}}" aria-current="page" href="{{route('front-home')}}">Lista</a></li>
+					<li class="nav-item"><a class="nav-link {{Route::is('pickups-map-emp') ? 'active' : ''}}" href="{{route('pickups-map-emp')}}">Mappa</a></li>
 					<li class="nav-item ml-lg-5">
     					<form id="logout-form" action="/logout" method="POST" style=";">
                             <button class="btn btn-warning" type="submit">Esci</button>
@@ -102,6 +104,10 @@
         @yield('body')
         
 	</div>
+	
+	{{-- Body Content out of a container --}}
+    @yield('extra')
+	
 	<br><br><br>
     
 	{{-- Base Scripts --}}

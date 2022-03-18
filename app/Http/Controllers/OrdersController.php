@@ -254,10 +254,15 @@ class OrdersController extends Controller
     
     public function showDetail($id)
     {
-        $order = Order::where('id', $id)->with('orderDetail')->first();
+        $order = Order::where('id', $id)->with('orderDetails')->first();
         return view('front.pickups.pickup-details', compact('order'));
     }
     
+    public function showDetailEmp($id)
+    {
+        $order = Order::where('id', $id)->with('orderDetails')->first();
+        return view('pickups.pickup-details', compact('order'));
+    }
     
     public function paymentPage($id)
     {

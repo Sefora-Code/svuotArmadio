@@ -45,3 +45,6 @@ Route::get('/payment-order/{id}', [OrdersController::class, 'paymentPage'])->nam
 
 Route::get('/pickups-home', [FrontPageController::class, 'pickupsHome'])->name('pickups-home');
 Route::get('/pickups-detail/{id}', [OrdersController::class, 'showDetail'])->name('pickups-detail');
+
+Route::get('/pickups-map-emp', [FrontPageController::class, 'pickupsMapEmp'])->name('pickups-map-emp');
+Route::get('/pickups-detail-emp/{id}', [OrdersController::class, 'showDetailEmp'])->name('pickups-detail-emp');

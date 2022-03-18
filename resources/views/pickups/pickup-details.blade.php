@@ -1,4 +1,4 @@
-@extends('front.master')
+@extends('pickups.master')
 
 @section('title'){{ __('front.title_home') }}@stop
 

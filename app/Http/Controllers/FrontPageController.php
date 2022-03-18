@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginController;
 use App\Models\Order;
 use App\Models\Customer;
+use App\Models\Employee;
 
 class FrontPageController extends Controller
 {
@@ -29,7 +30,17 @@ class FrontPageController extends Controller
     public function index(): Renderable
     {
         $thisUser = Auth::user();
-        return view('front.home', compact('thisUser'));
+        if ($thisUser->customer)
+        {
+            return view('front.home', compact('thisUser'));
+        }
+        else
+        {
+            $thisEmployeeId = Employee::where('user_id', Auth::user()->id)->pluck('id')->first();
+            $orders = Order::where('employee_id', $thisEmployeeId)->with('orderDetails')->orderByDesc('id')->get();
+            
+            return view('pickups.home', compact('thisUser', 'orders'));
+        }
     }
     
     /**
@@ -48,5 +59,12 @@ class FrontPageController extends Controller
         $thisCustomerId = Customer::where('user_id', Auth::user()->id)->pluck('id')->first();
         $orders = Order::where('customer_id', $thisCustomerId)->with('orderDetails')->orderByDesc('id')->get();
         return view('front.pickups.home', compact('orders'));
+    }
+    
+    public function pickupsMapEmp()
+    {
+        $thisEmployeeId = Employee::where('user_id', Auth::user()->id)->pluck('id')->first();
+        $orders = Order::where('employee_id', $thisEmployeeId)->with('orderDetails')->orderByDesc('id')->get();
+        return view('pickups.map', compact('orders'));
     }
 }

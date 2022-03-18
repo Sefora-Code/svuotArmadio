@@ -1,8 +1,21 @@
+html
+{
+	background-color: #e3f2fd;
+}
+
+body
+{
+	background-color: #e3f2fd !important;
+}
+
 /* main menu */
 
-div.menu-user-main{
-	margin-top: 1%;
-	background-color: #112FC4;
+#menu-user-main{
+	background-color: #e3f2fd;
+}
+#menu-user-main ul li
+{
+	font-weight: bold;	
 }
 
 div.menu-user-main div.col-lg-4{
@@ -34,9 +47,28 @@ div.info-personali div.credentials{
 	margin-left: 10px;
 }
 
-/* pick up reservation /*
+/* pick up reservation */
+
+.prenotazione-ritiro .progress
 {
-	
+	height: 3rem !important;
+	font-size: 1.25rem !important;
+	padding: 0;
+}
+
+.prenotazione-ritiro .progress-bar
+{
+	border: 1px solid white;	
+}
+
+#progress1
+{
+	border-radius: 10px 0px 0px 10px;
+}
+
+#progress3
+{
+	border-radius: 0px 10px 10px 0px;
 }
 /* steps */
 
@@ -79,7 +111,7 @@ div.prenotazione-ritiro div.pagamento div.dati{
 /* pick up history */
 
 div.storico-ritiri div.title{
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 div.storico-ritiri div.row h1{

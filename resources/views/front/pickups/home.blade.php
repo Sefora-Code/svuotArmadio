@@ -4,7 +4,7 @@
 
 @section('body')
 		<div class="row storico-ritiri">
-			<div class="row title"><h1>Storico ritiri</h1></div>
+			<div class="row title mb-5"><h1>Storico ritiri</h1></div>
 			<table class="table">
 				<thead>
 					<tr>
