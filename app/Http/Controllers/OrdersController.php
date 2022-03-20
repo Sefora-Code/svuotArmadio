@@ -158,9 +158,10 @@ class OrdersController extends Controller
             $orderDetails->volume = $request->volume;
             if ($request->has('notes')) // not mandatory
                 $orderDetails->notes = $request->notes;
-                $orderDetails->save();
-                
-                $toReturn->message = "Ritiro prenotato correttamente.";
+            
+            $orderDetails->save();
+            
+            $toReturn->message = "Ritiro prenotato correttamente.";
         }
         
         return redirect()
@@ -189,6 +190,8 @@ class OrdersController extends Controller
         $newOrderDetail->pickup_date = $request->date;
         $newOrderDetail->time_frame = $request->range_time;
         $newOrderDetail->order_id = $newOrder->id;
+        if ($request->has('notes')) // not mandatory
+            $newOrderDetail->notes = $request->notes;
         $newOrderDetail->save();        
         
         return redirect()->route('show-order', $newOrderDetail->id)->with('status', 'Ordine salvato correttamente');
@@ -270,4 +273,51 @@ class OrdersController extends Controller
         return view('front.orders.payment', compact('newOrderDetail'));
     }
     
+    /**
+     * get Employee's assigned orders
+     * @param int $empId
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function getTodayUserOrders($empId)
+    {
+        $orders = Order::where('employee_id', $empId)->where('fullfilled','!=', 2)->with('orderDetails')->orderByDesc('id')->get();
+        
+        // get coordinates for today orders
+        $baseUrl = "https://nominatim.openstreetmap.org/search?format=geojson&q=";
+        $todayOrders = [];
+        foreach($orders as $order)
+        {
+            if($order->orderDetails->pickup_date == date('Y-m-d 00:00:00'))
+            {
+                $encodedAddress = urlencode($order->orderDetails->shipping_address);
+                Log::info("Encoded Address :: ".$encodedAddress);
+                $obj = new \stdClass();
+                
+                // create a new cURL resource
+                $ch = curl_init();
+                // set URL and other appropriate options
+                curl_setopt($ch, CURLOPT_URL, $baseUrl.$encodedAddress);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_REFERER, "https://www.lostelloportaaporta.it");
+                
+                // grab result
+                $result = curl_exec($ch);
+                curl_close($ch);
+                
+                // create a simpler object to pass to the client
+                $orderData = json_decode($result);
+                $obj->order = $order;
+                $obj->lat = $orderData->features[0]->geometry->coordinates[1];
+                $obj->lng = $orderData->features[0]->geometry->coordinates[0];
+                $todayOrders[] = $obj;
+                
+                // sleep for 1 second to comply with Nominatim service usage policy at
+                // https://operations.osmfoundation.org/policies/nominatim/
+                sleep(1);
+            }
+        }
+        
+        
+        return $todayOrders;
+    }
 }

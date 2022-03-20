@@ -29,6 +29,10 @@
 						<div class="col">1-{{$order->orderDetails->volume}} Sacchetti</div>
 					</div>
 					<div class="row mb-2">
+						<div class="col text-right">Nome sul campanello e note:</div>
+						<div class="col">{{$order->orderDetails->notes}}</div>
+					</div>
+					<div class="row mb-2">
 						<div class="col text-right">Costo:</div>
 						<div class="col">-</div>
 					</div>

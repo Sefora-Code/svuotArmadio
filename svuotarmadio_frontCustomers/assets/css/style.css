@@ -1,8 +1,8 @@
 /* main menu */
 
-div.menu-user-main{
+#menu-user-main{
 	margin-top: 1%;
-	background-color: #112FC4;
+	background-color: #e3f2fd;
 }
 
 div.menu-user-main div.col-lg-4{

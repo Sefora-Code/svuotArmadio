@@ -26,7 +26,14 @@
 						<div class="col-lg-12">
 							<div class="row">
 								<div class="col"><label for="address"> Indirizzo </label></div>
-								<div class="col"><input type="text" name="shipping_address" id="address" class="form-control" placeholder="Indirizzo" value="{{ isset($newOrderDetail) ? $newOrderDetail->shipping_adress : $thisUser->address }}" required="required" /></div>
+								<div class="col"><input type="text" name="shipping_address" id="address" class="form-control" placeholder="Indirizzo" value="{{ isset($newOrderDetail) ? $newOrderDetail->shipping_address : $thisUser->address }}" required="required" /></div>
+							</div>
+							<hr />
+							<div class="row">
+								<div class="col"><label for="notes"> Nome sul campanello e altre note</label></div>
+								<div class="col">
+									<textarea rows="3" cols="20" name="notes" id="notes" class="form-control" required="required">{{ isset($newOrderDetail) ? $newOrderDetail->notes : "" }}</textarea>
+								</div>
 							</div>
 							<hr />
 							<div class="row">
@@ -38,19 +45,19 @@
 								<div class="col"><label for="range-time"> Range Orario </label></div>
 								<div class="col">
 									<div class="form-check" id="range-time">
-										<input class="form-check-input" type="radio" name="range_time" id="first-range" value="mattina" {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "mattina" ? "checked" : "" }}/>
+										<input class="form-check-input" type="radio" name="range_time" id="first-range" value="mattina" {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "Mattina" ? "checked" : "" }}/>
 										<label class="form-check-label" for="first-range">
 											Mattino
 										</label>
 									</div>
 									<div class="form-check" id="range-time">
-										<input class="form-check-input" type="radio" name="range_time" id="second-range" value="pomeriggio"  {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "pomeriggio" ? "checked" : "" }} />
+										<input class="form-check-input" type="radio" name="range_time" id="second-range" value="pomeriggio"  {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "Pomeriggio" ? "checked" : "" }} />
 										<label class="form-check-label" for="second-range">
 											Pomeriggio
 										</label>
 									</div>
 									<div class="form-check" id="range-time">
-										<input class="form-check-input" type="radio" name="range_time" id="third-range" value="sera"  {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "sera" ? "checked" : "" }} />
+										<input class="form-check-input" type="radio" name="range_time" id="third-range" value="sera"  {{ isset($newOrderDetail) && $newOrderDetail->time_frame == "Sera" ? "checked" : "" }} />
 										<label class="form-check-label" for="third-range">
 											Sera
 										</label>
