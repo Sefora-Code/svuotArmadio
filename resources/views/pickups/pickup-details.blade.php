@@ -53,10 +53,10 @@
 		</div>
 		<div class="row mb-4">
 			<div class="col-6 text-right">
-				<button class="btn btn-success mb-1" onclick="editOrder({{$order->id}}, 1)">RITIRATO</button>
+				<button class="btn btn-success mb-1" onclick="editOrder({{$order->id}}, 4)">RITIRATO</button>
 			</div>
 			<div class="col-6">
-				<button class="btn btn-danger" onclick="editOrder({{$order->id}}, 2)">NON RITIRATO</button>
+				<button class="btn btn-danger" onclick="editOrder({{$order->id}}, 5)">NON RITIRATO</button>
 			</div>
 		</div>
 		<div class="row">
@@ -73,7 +73,14 @@ function editOrder(orderId, newState)
 {
 	if (confirm("Sei sicuro?"))
 	{
-		// chiamata ajax per modificare l'ordine
+		// ajax call to update the order status
+		fetch("{{ route('update.order.status') }}?o="+orderId+"&s="+newState, {method: 'GET'})
+	    .then(response => response.json())
+	    .then(data => 
+	    {
+			alert(data.text);
+			window.location.href = "{{route('front-home')}}";
+	    });
 	}
 	else
 		alert("Azione annullata");

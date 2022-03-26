@@ -27,7 +27,7 @@
 				</thead>
 				<tbody>
 				@foreach($orders as $order)
-					@if($order->orderDetails->pickup_date == date('Y-m-d 00:00:00'))
+					@if($order->orderDetails->pickup_date == date('Y-m-d 00:00:00') && $order->fullfilled < 4)
     					<tr>
 <!--     						<th scope="row"><a href="{{route('pickups-detail-emp', $order->id)}}">{{$order->id}}</a></th> -->
 <!--     						<td>{{ date("d / m / Y", strtotime($order->created_at)) }}</td> -->
@@ -59,9 +59,9 @@
     						<td>
     							<a class="btn btn-info mb-1" href="{{route('pickups-detail-emp', $order->id)}}">Dettagli</a>
     							<br>
-    							<button class="btn btn-success mb-1" onclick="editOrder({{$order->id}}, 1)">Ritirato</button>
+    							<button class="btn btn-success mb-1" onclick="editOrder({{$order->id}}, 4)">Ritirato</button>
     							<br>
-    							<button class="btn btn-danger" onclick="editOrder({{$order->id}}, 2)">NON Ritirato</button>
+    							<button class="btn btn-danger" onclick="editOrder({{$order->id}}, 5)">NON Ritirato</button>
     						</td>
     					</tr>
 					@endif
@@ -78,7 +78,14 @@ function editOrder(orderId, newState)
 {
 	if (confirm("Sei sicuro?"))
 	{
-		// chiamata ajax per modificare l'ordine
+		// ajax call to update the order status
+		fetch("{{ route('update.order.status') }}?o="+orderId+"&s="+newState, {method: 'GET'})
+	    .then(response => response.json())
+	    .then(data => 
+	    {
+			alert(data.text);
+			location.reload(true);
+	    });
 	}
 	else
 		alert("Azione annullata");

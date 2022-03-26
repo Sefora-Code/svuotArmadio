@@ -320,4 +320,26 @@ class OrdersController extends Controller
         
         return $todayOrders;
     }
+    
+    public function UpdateOrderStatus(Request $request)
+    {
+        $obj = new \stdClass();
+        
+        if ($request->has("o"))
+        {
+            $order = Order::find($request->o);
+            $order->fullfilled = $request->s;
+            $order->touch();
+            
+            $obj->code = 200; 
+            $obj->text = "Ordine aggiornato correttamente.";
+        }
+        else 
+        {
+            $obj->code = 500;
+            $obj->text = "Ordine non trovato.";
+        }
+        
+        return $obj;
+    }
 }

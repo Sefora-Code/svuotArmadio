@@ -49,3 +49,5 @@ Route::get('/pickups-detail/{id}', [OrdersController::class, 'showDetail'])->nam
 Route::get('/pickups-map-emp', [FrontPageController::class, 'pickupsMapEmp'])->name('pickups-map-emp');
 Route::get('/pickups-detail-emp/{id}', [OrdersController::class, 'showDetailEmp'])->name('pickups-detail-emp');
 Route::get('/pickups-get-today/{empId}', [OrdersController::class, 'getTodayUserOrders'])->name('pickups-get-today');
+
+Route::get('/update_order_status', [OrdersController::class, 'UpdateOrderStatus'])->name('update.order.status');
