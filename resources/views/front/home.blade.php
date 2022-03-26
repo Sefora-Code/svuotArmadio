@@ -7,7 +7,7 @@
 		<div class="row info-personali">
 			<h1> Informazioni Personali </h1>
 			<div class="col-lg-4">
-				<img src="https://picsum.photos/300/300" class="img-thumbnail">
+				<img src="images/solo_testo_trasparente-01.png" class="img-thumbnail" width="350px"><!-- https://picsum.photos/300/300 -->
 			</div>
 			<div class="col-lg-8 mt-5">
 				<form method="post" action="{{route('save-user-data')}}">

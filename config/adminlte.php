@@ -45,8 +45,8 @@ return [
     |
     */
 
-    'logo' => '<b>svuot</b>Armadio',
-    'logo_img' => 'images/logo-sefora-ocra-solo-img-300.png',
+    'logo' => 'lostello porta a porta',
+    'logo_img' => 'images/solo_testo_trasparente-01.png',//logo-sefora-ocra-solo-img-300.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
