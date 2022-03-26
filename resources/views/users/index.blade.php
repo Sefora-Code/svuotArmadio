@@ -33,6 +33,7 @@
     </thead>
     <tbody>
 		@foreach($users as $user)
+			@if((Route::is('customers') && $user->customer) || (Route::is('riders') && !$user->customer)) 
         	<tr>
 				<td>{{ $user->name }}</td>
 				<td>{{ $user->surname }}</td>
@@ -48,10 +49,9 @@
                         @csrf
                         <button type="submit" class="btn btn-warning mb-2" onclick="remove('{{$user->id}}')">Elimina</button>
                     </form>
-					
-					
 				</td>
 	        </tr>
+	        @endif
         @endforeach
     </tbody>
 </table>

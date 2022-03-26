@@ -73,9 +73,9 @@
             <th>Stato</th>
             <th>Indirizzo</th>
             <th>Volume</th>
+            <th>Assegnato a</th>
             <th>Data ritiro</th>
             <th>Creato il</th>
-            <th>Assegnato a</th>
             <th>Note</th>
             <th></th>
         </tr>
@@ -84,12 +84,42 @@
 		@foreach($orders as $order)
         	<tr>
 				<td>{{ $order->customer->user->name }} {{ $order->customer->user->surname }}</td>
-				<td>{{ $order->fullfilled }}</td>
-				<td>{{ $order->customer->address }}</td>
-				<td>{{ $order->orderDetails->volume }}</td>
+				<td>
+				@switch($order->fullfilled)
+					@case(0)
+						Registrato
+						@break
+					@case(1)
+						Approvato
+						@break 
+					@case(2)
+						Rifiutato
+						@break
+					@case(3)
+						Assegnato al rider
+						@break
+					@case(4)
+						Completato
+						@break
+					@case(5)
+						Non si riesce a completare
+						@break
+				@endswitch
+				</td>
+				<td>{{ $order->orderDetails->shipping_address }}</td>
+				<td>
+				@switch($order->orderDetails->volume)
+					@case(2)
+						1 - 2 Sacchetti
+						@break
+					@case(4)
+						2 - 4 Sacchetti
+						@break 
+				@endswitch
+				</td>
+				<td>{{ $order->employee ? $order->employee->user->name.' '.$order->employee->user->surname : '-'}}</td>
 				<td>{{ $order->orderDetails->pickup_date }}</td>
 				<td>{{ $order->created_at }}</td>
-				<td>{{ $order->employee ? $order->employee->user->name.' '.$order->employee->user->surname : '-'}}</td>
 				<td>{{ $order->orderDetails->notes }}</td>
 				<td>
 					<button class="btn btn-success mb-2" onclick="accept('{{$order->id}}')">Accetta</button>

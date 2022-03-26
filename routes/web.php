@@ -25,6 +25,8 @@ Route::get('/', function () {
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::resource('/users', UsersController::class);
+Route::get('/customers', [UsersController::class, 'index'])->name('customers');
+Route::get('/riders', [UsersController::class, 'index'])->name('riders');
 Route::get('/orders', [OrdersController::class, 'index'])->name('orders');
     
 Route::post('/assign-order', [OrdersController::class, 'assign'])->name('order.assign');
