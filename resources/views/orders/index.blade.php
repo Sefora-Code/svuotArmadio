@@ -8,7 +8,7 @@
 
 
 @section('content_header')
-    <h1>Ordini</h1>
+    <h1>Ritiri</h1>
 @stop
 
 @section('content')

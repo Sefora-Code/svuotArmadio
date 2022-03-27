@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Employee;
 use App\Models\Customer;
+use App\Models\User;
 
 class OrdersController extends Controller
 {
@@ -259,6 +260,42 @@ class OrdersController extends Controller
     {
         $order = Order::where('id', $id)->with('orderDetails')->first();
         return view('front.pickups.pickup-details', compact('order'));
+    }
+    
+    /**
+     * show Employee's today assigned orders for ordering pourposes
+     * @param int $empId
+     * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
+     */
+    public function showTodayUserOrders($riderId)
+    {
+        $employee = Employee::find($riderId);
+        $user = User::find($employee->user_id);
+        $orders = Order::where('employee_id', $riderId)->where('fullfilled','!=', 2)->with('orderDetails')->orderByDesc('id')->get();
+        return view('orders.pickups-ordering', compact('orders', 'user'));
+    }
+    
+    public function confirmPickupsOrdering(Request $request)
+    {
+        $obj = new \stdClass();
+        
+        Log::info("OrdersController :: ".json_encode($request->orders));
+        
+        // TODO code to store pickup orders
+        
+        
+        if (true)
+        {
+            $obj->code = 200;
+            $obj->text = "Ordinamento correttamente assegnato.";
+        }
+        else
+        {
+            $obj->code = 500;
+            $obj->text = "Ordine non trovato.";
+        }
+        
+        return $obj;
     }
     
     public function showDetailEmp($id)

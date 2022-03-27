@@ -43,6 +43,9 @@
 				<td>{{ $user->phone_number }}</td>
 				<td>{{ $user->created_at }}</td>
 				<td>
+					@if($user->employee)
+						<a class="btn btn-info mb-2" href="{{route('rider.ordering.pickups', $user->employee->id) }}">Ordinamento ritiri</a>
+					@endif
 					<a class="btn btn-success mb-2" href="{{route('users.edit', $user->id) }}">Modifica</a>
 					<form action="{{ route('users.destroy', $user->id) }}" method="POST">
                         @method('DELETE')

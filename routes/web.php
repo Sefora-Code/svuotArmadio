@@ -27,12 +27,14 @@ Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::resource('/users', UsersController::class);
 Route::get('/customers', [UsersController::class, 'index'])->name('customers');
 Route::get('/riders', [UsersController::class, 'index'])->name('riders');
+Route::get('/rider-orders/{id}', [OrdersController::class, 'showTodayUserOrders'])->name('rider.ordering.pickups');
 Route::get('/orders', [OrdersController::class, 'index'])->name('orders');
     
 Route::post('/assign-order', [OrdersController::class, 'assign'])->name('order.assign');
 Route::post('/accept-order', [OrdersController::class, 'accept'])->name('order.accept');
 Route::post('/reject-order', [OrdersController::class, 'reject'])->name('order.reject');
 Route::post('/store-order', [OrdersController::class, 'storeAdminOrder'])->name('store.order');
+Route::post('/pickups-ordering', [OrdersController::class, 'confirmPickupsOrdering'])->name('pickups.ordering.confirm');
 Route::get('/customers/info', [CustomersController::class, 'index'])->name('informations');
 
 Route::get('/front-home', [FrontPageController::class, 'index'])->name('front-home');
