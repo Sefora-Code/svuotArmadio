@@ -85,7 +85,7 @@
         	<tr>
 				<td>{{ $order->customer->user->name }} {{ $order->customer->user->surname }}</td>
 				<td>
-				@switch($order->fullfilled)
+				@switch($order->status)
 					@case(0)
 						Registrato
 						@break

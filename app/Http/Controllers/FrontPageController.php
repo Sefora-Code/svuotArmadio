@@ -35,7 +35,7 @@ class FrontPageController extends Controller
         else
         {
             $thisEmployeeId = Employee::where('user_id', Auth::user()->id)->pluck('id')->first();
-            $orders = Order::where('employee_id', $thisEmployeeId)->where('fullfilled','!=', 2)->with('orderDetails')->orderByDesc('id')->get();
+            $orders = Order::where('employee_id', $thisEmployeeId)->where('status','!=', 2)->with('orderDetails')->orderBy('seq_number')->get();
             
             return view('pickups.home', compact('thisUser', 'orders'));
         }
@@ -55,7 +55,7 @@ class FrontPageController extends Controller
     public function pickupsHome() 
     {
         $thisCustomerId = Customer::where('user_id', Auth::user()->id)->pluck('id')->first();
-        $orders = Order::where('customer_id', $thisCustomerId)->where('fullfilled','!=', 2)->with('orderDetails')->orderByDesc('id')->get();
+        $orders = Order::where('customer_id', $thisCustomerId)->where('status','!=', 2)->with('orderDetails')->orderBy('seq_number')->get();
         return view('front.pickups.home', compact('orders'));
     }
     

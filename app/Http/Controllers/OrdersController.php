@@ -53,7 +53,7 @@ class OrdersController extends Controller
         $toReturn->message = "";
         
         $order = Order::find($request->orderId);
-        $order->fullfilled = 1;
+        $order->status = 1;
         $order->save();
         
         $toReturn->message = $request->orderId;
@@ -67,7 +67,7 @@ class OrdersController extends Controller
         $toReturn->message = "";
         
         $order = Order::find($request->orderId);
-        $order->fullfilled = 2;
+        $order->status = 2;
         $order->save();
         
         $toReturn->message = $request->orderId;
@@ -83,7 +83,7 @@ class OrdersController extends Controller
         $order = Order::find($request->orderId);
         $order->employee_id = $request->employeeId;
         $order->assigned_by = Auth::user()->employee->id;
-        $order->fullfilled = 3;
+        $order->status = 3;
         $order->save();
         
         $toReturn->message = "Assegnazione effettuata";
@@ -108,7 +108,7 @@ class OrdersController extends Controller
         {
             $customer = Customer::find($request->customer);
             $order = new Order();
-            $order->fullfilled = 0;
+            $order->status = 0;
             $order->customer_id = $request->customer;
             $order->save();
             
@@ -148,7 +148,7 @@ class OrdersController extends Controller
         {
             $user = Auth::user(); // the customer
             $order = new Order();
-            $order->fullfilled = 0;
+            $order->status = 0;
             $order->customer_id = $request->customer;
             $order->save();
             
@@ -181,7 +181,7 @@ class OrdersController extends Controller
     {
         $thisCustomerId = Customer::where('user_id', Auth::user()->id)->pluck('id')->first();
         $newOrder = new Order();
-        $newOrder->fullfilled = 0;
+        $newOrder->status = 0;
         $newOrder->customer_id = $thisCustomerId;
         $newOrder->save();
         
@@ -271,7 +271,7 @@ class OrdersController extends Controller
     {
         $employee = Employee::find($riderId);
         $user = User::find($employee->user_id);
-        $orders = Order::where('employee_id', $riderId)->where('fullfilled','!=', 2)->with('orderDetails')->orderByDesc('id')->get();
+        $orders = Order::where('employee_id', $riderId)->where('status','!=', 2)->with('orderDetails')->orderBy('seq_number')->get();
         return view('orders.pickups-ordering', compact('orders', 'user'));
     }
     
@@ -282,18 +282,24 @@ class OrdersController extends Controller
         Log::info("OrdersController :: ".json_encode($request->orders));
         
         // TODO code to store pickup orders
-        
-        
-        if (true)
+        foreach ($request->orders as $pickup) 
         {
-            $obj->code = 200;
-            $obj->text = "Ordinamento correttamente assegnato.";
+            $thisOrder = Order::find($pickup['id']);
+            if ($thisOrder)
+            {
+                $thisOrder->seq_number = $pickup['order'];
+                $thisOrder->touch();
+            }
+            else
+            {
+                $obj->code = 500;
+                $obj->text = "Ordine ".$pickup->id." non trovato.";
+                return $obj;
+            }
         }
-        else
-        {
-            $obj->code = 500;
-            $obj->text = "Ordine non trovato.";
-        }
+        
+        $obj->code = 200;
+        $obj->text = "Ordinamento correttamente assegnato.";
         
         return $obj;
     }
@@ -317,7 +323,7 @@ class OrdersController extends Controller
      */
     public function getTodayUserOrders($empId)
     {
-        $orders = Order::where('employee_id', $empId)->where('fullfilled','!=', 2)->with('orderDetails')->orderByDesc('id')->get();
+        $orders = Order::where('employee_id', $empId)->where('status','!=', 2)->with('orderDetails')->orderBy('seq_number')->get();
         
         // get coordinates for today orders
         $baseUrl = "https://nominatim.openstreetmap.org/search?format=geojson&q=";
@@ -365,7 +371,7 @@ class OrdersController extends Controller
         if ($request->has("o"))
         {
             $order = Order::find($request->o);
-            $order->fullfilled = $request->s;
+            $order->status = $request->s;
             $order->touch();
             
             $obj->code = 200; 

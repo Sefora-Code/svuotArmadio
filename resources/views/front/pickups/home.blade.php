@@ -23,7 +23,7 @@
 						<td>{{ date("d / m / Y", strtotime($order->orderDetails->pickup_date)) }}</td>
 						<td>{{ $order->orderDetails->shipping_address }}</td>
 						<td>
-						@switch($order->fullfilled)
+						@switch($order->status)
 							@case(0)
 								Registrato
 								@break

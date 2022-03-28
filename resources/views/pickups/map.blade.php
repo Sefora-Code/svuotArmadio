@@ -80,19 +80,30 @@ window.onload = () => {
 	    	
 			for (let i=0; i < data.length; i++)
 			{
-    			addMapMarker(data[i]);
+    			addMapMarker(data[i], (i+1));
 			}
     	})
         .catch((error) => console.log("Errore nel reperire la lista degli ordini: "+ error));
 	}
 	 
-    function addMapMarker(orderObj) 
+    function addMapMarker(orderObj, seq_number) 
     {
-    	L.marker([orderObj.lat, orderObj.lng]).addTo(map)
+    	var numberIcon = new NumberIcon({iconUrl: 'images/map-markers/marker-'+seq_number+'.png'});
+    	L.marker([orderObj.lat, orderObj.lng], {icon: numberIcon}).addTo(map)
    	    .bindPopup("<a href='/pickups-detail-emp/"+orderObj.order.id+"'>"+orderObj.order.order_details.shipping_address+"</a>");
     }
 
-
+    var NumberIcon = L.Icon.extend({
+        options: {
+            iconSize:     [60, 85],
+            iconAnchor:   [25, 84],
+            popupAnchor:  [3, -85]
+        }
+    });
 	
 </script>
 @endsection		
+
+<!-- 
+<a href='https://www.freepik.com/vectors/infographic'>Infographic vector created by coolvector - www.freepik.com</a>
+ -->

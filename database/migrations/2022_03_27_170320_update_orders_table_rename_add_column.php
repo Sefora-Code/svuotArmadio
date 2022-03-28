@@ -15,7 +15,7 @@ class UpdateOrdersTableRenameAddColumn extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             $table->renameColumn('fullfilled', 'status');
-            $table->unsignedSmallInteger("seq_number")->comment("this order's position in the processing sequence");
+            $table->unsignedSmallInteger("seq_number")->after("employee_id")->comment("this order's position in the processing sequence");
         });
     }
 
