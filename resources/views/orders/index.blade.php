@@ -35,6 +35,13 @@
 		
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="address">Indirizzo</span>
+			  	</div>
+			  	<input type="text" name="shipping_address" aria-describedby="address" class="form-control" placeholder="lasciare vuoto se uguale all'indirizzo del cliente" required="required" />
+			</div>
+			
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
 			    	<span class="input-group-text" id="volumeLabel">Volume</span>
 			  	</div>
 			  	<input type="number" class="form-control" name="volume" aria-describedby="volumeLabel" placeholder="solo valori interi" required>
@@ -53,7 +60,7 @@
 			  <div class="input-group-prepend">
 			    <span class="input-group-text">Note</span>
 			  </div>
-			  <textarea class="form-control" aria-label="Note"></textarea>
+			  <textarea name="notes" class="form-control" aria-label="Note"></textarea>
 			</div>
 
 			@csrf
@@ -141,19 +148,48 @@
         @endforeach
     </tbody>
 </table>
-    
+<br><br>    
 
 
 @stop
 
 @section('js')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.11.3/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/fh-3.2.0/datatables.min.js"></script>
 <script> 
 
     $(document).ready(function() 
     {
-        $('#ordersTable').DataTable();
+        $('#ordersTable').DataTable({
+            dom: 'Blfrtip',
+            "order": [[ 5, 'desc' ]],
+            buttons: [
+                'csv',
+                'excel',
+                {
+                    extend: 'pdf',
+                	orientation: 'landscape',
+            	    customize: function(doc) {
+            	    	doc.styles.tableHeader.fontSize = 7
+            	    	doc.defaultStyle.fontSize = 7;
+            	    }
+                },
+                'print'
+            ],
+            language: {
+                search: 		"Cerca nella tabella:",
+                lengthMenu: "Mostra _MENU_ righe",
+                info:       "Mostro da _START_ a _END_ su _TOTAL_ ordini",
+        				paginate: {
+                    first:      "Primo",
+                    previous:   "Precedente",
+                    next:       "Prossimo",
+                    last:       "Ultimo"
+                },
+        			}
+        });
     });
     
     function showOrderUI()

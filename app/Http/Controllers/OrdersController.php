@@ -114,7 +114,7 @@ class OrdersController extends Controller
             
             $orderDetails = new OrderDetail();
             $orderDetails->order_id = $order->id;
-            $orderDetails->shipping_address = $customer->user->address;
+            $orderDetails->shipping_address = $request->has('shipping_address') ? $request->shipping_address : $customer->user->address;
             $orderDetails->pickup_date = $request->date;
             $orderDetails->volume = $request->volume;
             if ($request->has('notes')) // not mandatory
