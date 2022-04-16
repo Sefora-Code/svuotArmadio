@@ -114,7 +114,7 @@ class OrdersController extends Controller
             
             $orderDetails = new OrderDetail();
             $orderDetails->order_id = $order->id;
-            $orderDetails->shipping_address = $request->has('shipping_address') ? $request->shipping_address : $customer->user->address;
+            $orderDetails->shipping_address = $request->shipping_address != '' ? $request->shipping_address : $customer->user->address;
             $orderDetails->pickup_date = $request->date;
             $orderDetails->volume = $request->volume;
             if ($request->has('notes')) // not mandatory
@@ -335,6 +335,7 @@ class OrdersController extends Controller
                 $encodedAddress = urlencode($order->orderDetails->shipping_address);
                 Log::info("Encoded Address :: ".$encodedAddress);
                 $obj = new \stdClass();
+                $obj->order = $order;
                 
                 // create a new cURL resource
                 $ch = curl_init();
@@ -346,12 +347,19 @@ class OrdersController extends Controller
                 // grab result
                 $result = curl_exec($ch);
                 curl_close($ch);
-                
                 // create a simpler object to pass to the client
                 $orderData = json_decode($result);
-                $obj->order = $order;
-                $obj->lat = $orderData->features[0]->geometry->coordinates[1];
-                $obj->lng = $orderData->features[0]->geometry->coordinates[0];
+                if (count($orderData->features) > 0)
+                {
+                    $obj->lat = $orderData->features[0]->geometry->coordinates[1];
+                    $obj->lng = $orderData->features[0]->geometry->coordinates[0];
+                }
+                else 
+                {
+                    $obj->lat = 0;
+                    $obj->lng = 0;
+                    $obj->error = "Indirizzo non trovato.";
+                }
                 $todayOrders[] = $obj;
                 
                 // sleep for 1 second to comply with Nominatim service usage policy at

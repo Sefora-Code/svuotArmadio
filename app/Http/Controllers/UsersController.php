@@ -84,7 +84,7 @@ class UsersController extends Controller
             Employee::create(['hired_on' => now(), 'user_id' => $user->id]);
         }
         
-        return redirect()->to('users')->with('success', 'Utente creato correttamente');
+        return redirect()->back()->with('success', 'Utente creato correttamente');
     }
     
     /**
@@ -170,7 +170,7 @@ class UsersController extends Controller
             }
         }
         
-        return redirect()->to('users')->with('success', 'Utente modificato correttamente');
+        return redirect()->back()->with('success', 'Utente modificato correttamente');
     }
     
     /**

@@ -4,17 +4,20 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <style>
+    .dt-button{margin-bottom: 20px;}
+    </style>
 @stop
 
 
 @section('content_header')
-    <h1>Tutti gli Utenti</h1>
+    <h1>{{ Route::is('customers') ? 'Tutti i Clienti' : 'Tutti i Rider' }}</h1>
 @stop
 
 @section('content')
 
 <div class="text-right mb-4 p-3" style="background-color: white;">
-	<a class="btn btn-primary" href="{{ route('users.create') }}">Inserisci nuovo utente</a>
+	<a class="btn btn-primary" href="{{ route('users.create') }}">Inserisci nuovo {{ Route::is('customers') ? 'cliente' : 'rider' }}</a>
 </div>
 
 
@@ -23,7 +26,7 @@
         <tr>
             <th>Nome</th>
             <th>Cognome</th>
-            <th>Tipo</th>
+<!--             <th>Tipo</th> -->
             <th>Email</th>
             <th>Indirizzo</th>
             <th>Telefono</th>
@@ -37,7 +40,7 @@
         	<tr>
 				<td>{{ $user->name }}</td>
 				<td>{{ $user->surname }}</td>
-				<td>{{ $user->customer ? "Cliente" : "Dipendente" }}</td>
+<!-- 				<td>{{ $user->customer ? "Cliente" : "Dipendente" }}</td> -->
 				<td>{{ $user->email }}</td>
 				<td>{{ $user->address }}</td>
 				<td>{{ $user->phone_number }}</td>
@@ -76,7 +79,7 @@
             dom: 'Blfrtip',
 //             "order": [[ 5, 'desc' ]],
             buttons: [
-                'csv',
+//                 'csv',
                 'excel',
                 {
                     extend: 'pdf',
@@ -86,7 +89,7 @@
             	    	doc.defaultStyle.fontSize = 7;
             	    }
                 },
-                'print'
+//                 'print'
             ],
             language: {
                 search: 		"Cerca nella tabella:",

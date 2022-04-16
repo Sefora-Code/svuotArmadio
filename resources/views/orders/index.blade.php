@@ -4,6 +4,9 @@
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
+    <style>
+    .dt-button{margin-bottom: 20px;}
+    </style>
 @stop
 
 
@@ -37,7 +40,7 @@
 				<div class="input-group-prepend">
 			    	<span class="input-group-text" id="address">Indirizzo</span>
 			  	</div>
-			  	<input type="text" name="shipping_address" aria-describedby="address" class="form-control" placeholder="lasciare vuoto se uguale all'indirizzo del cliente" required="required" />
+			  	<input type="text" name="shipping_address" aria-describedby="address" class="form-control" placeholder="lasciare vuoto se uguale all'indirizzo del cliente"/>
 			</div>
 			
 			<div class="input-group mb-3">
@@ -129,8 +132,11 @@
 				<td>{{ $order->created_at }}</td>
 				<td>{{ $order->orderDetails->notes }}</td>
 				<td>
+				@if($order->status == 0)
 					<button class="btn btn-success mb-2" onclick="accept('{{$order->id}}')">Accetta</button>
 					<button class="btn btn-warning mb-2" onclick="reject('{{$order->id}}')">Rifiuta</button>
+				@endif
+				@if($order->status == 1)
 					<button class="btn btn-info mb-2" onclick="showAssignEmployee(this)">Assegna</button>
 					<span class="d-none">
     					<select class="mb-2">
@@ -143,6 +149,7 @@
     					</select>
 						<button class="btn btn-success" onclick="confirmEmployee(this, '{{$order->id}}')">Conferma</button>
 					</span>
+				@endif
 				</td>
 	        </tr>
         @endforeach
@@ -166,7 +173,7 @@
             dom: 'Blfrtip',
             "order": [[ 5, 'desc' ]],
             buttons: [
-                'csv',
+//                 'csv',
                 'excel',
                 {
                     extend: 'pdf',
@@ -176,7 +183,7 @@
             	    	doc.defaultStyle.fontSize = 7;
             	    }
                 },
-                'print'
+//                 'print'
             ],
             language: {
                 search: 		"Cerca nella tabella:",

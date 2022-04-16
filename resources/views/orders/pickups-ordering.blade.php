@@ -12,7 +12,7 @@
     /* use viewport-relative units to cover page fully */
     
     #map {
-        height: 500px;
+        height: 600px;
         width: 100%;
     }
     </style>
@@ -43,7 +43,7 @@
     <tbody>
 		@foreach($orders as $order)
 			@if($order->orderDetails->pickup_date == date('Y-m-d 00:00:00') && $order->status < 4)
-        	<tr>
+        	<tr id="order_{{$order->id}}">
 				<td>{{ $order->customer->user->name }} {{ $order->customer->user->surname }}</td>
 				<td>
 				@switch($order->status)
@@ -101,7 +101,7 @@
 
 <div class="row mt-4">
 	<div class="col-12">
-		<div class="title mb-5 text-center"><h1>Mappa</h1></div>
+		<div class="title mb-3 text-center"><h1>Mappa</h1></div>
 
 		<div id="map" ></div>
 	
@@ -128,7 +128,19 @@
 
     $(document).ready(function() 
     {
-        $('#ordersTable').DataTable();
+        $('#ordersTable').DataTable({
+            language: {
+                search: 		"Cerca nella tabella:",
+                lengthMenu: "Mostra _MENU_ righe",
+                info:       "Mostro da _START_ a _END_ su _TOTAL_ ritiri",
+        				paginate: {
+                    first:      "Primo",
+                    previous:   "Precedente",
+                    next:       "Prossimo",
+                    last:       "Ultimo"
+                },
+			}
+        });
     });
 
     function checkPositive(thisInput)
@@ -216,7 +228,15 @@
     	    	
     			for (let i=0; i < data.length; i++)
     			{
-        			addMapMarker(data[i], (i+1));
+        			if (data[i].lat == 0) // error getting this address
+        			{
+            			alert(`Errore! Indirizzo ${data[i].order.order_details.shipping_address} non trovato`); 
+            			document.getElementById(`order_${data[i].order.id}`).style.backgroundColor = "rgba(255,20,20,0.3)";
+        			}
+        			else
+        			{
+        				addMapMarker(data[i], (i+1));
+        			}
     			}
         	})
             .catch((error) => console.log("Errore nel reperire la lista degli ordini: "+ error));
