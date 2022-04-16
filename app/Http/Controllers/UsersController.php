@@ -194,7 +194,7 @@ class UsersController extends Controller
         
         $user->delete();
         
-        return redirect()->to('users')->with('success', 'Utente rimosso correttamente');
+        return redirect()->back()->with('success', 'Utente rimosso correttamente');
     }
     
     /**

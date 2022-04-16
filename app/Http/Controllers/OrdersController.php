@@ -108,7 +108,7 @@ class OrdersController extends Controller
         {
             $customer = Customer::find($request->customer);
             $order = new Order();
-            $order->status = 0;
+            $order->status = 1;
             $order->customer_id = $request->customer;
             $order->save();
             

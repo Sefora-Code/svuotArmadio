@@ -81,9 +81,9 @@
         <tr>
             <th>Ciente</th>
             <th>Stato</th>
+            <th>Assegnato a</th>
             <th>Indirizzo</th>
             <th>Volume</th>
-            <th>Assegnato a</th>
             <th>Data ritiro</th>
             <th>Creato il</th>
             <th>Note</th>
@@ -116,18 +116,20 @@
 						@break
 				@endswitch
 				</td>
+				<td>{{ $order->employee ? $order->employee->user->name.' '.$order->employee->user->surname : '-'}}</td>
 				<td>{{ $order->orderDetails->shipping_address }}</td>
 				<td>
 				@switch($order->orderDetails->volume)
+					@case(1)
 					@case(2)
 						1 - 2 Sacchetti
 						@break
+					@case(3)
 					@case(4)
 						2 - 4 Sacchetti
 						@break 
 				@endswitch
 				</td>
-				<td>{{ $order->employee ? $order->employee->user->name.' '.$order->employee->user->surname : '-'}}</td>
 				<td>{{ $order->orderDetails->pickup_date }}</td>
 				<td>{{ $order->created_at }}</td>
 				<td>{{ $order->orderDetails->notes }}</td>
