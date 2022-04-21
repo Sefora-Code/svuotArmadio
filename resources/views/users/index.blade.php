@@ -37,26 +37,28 @@
     <tbody>
 		@foreach($users as $user)
 			@if((Route::is('customers') && $user->customer) || (Route::is('riders') && !$user->customer)) 
-        	<tr>
-				<td>{{ $user->name }}</td>
-				<td>{{ $user->surname }}</td>
-<!-- 				<td>{{ $user->customer ? "Cliente" : "Dipendente" }}</td> -->
-				<td>{{ $user->email }}</td>
-				<td>{{ $user->address }}</td>
-				<td>{{ $user->phone_number }}</td>
-				<td>{{ $user->created_at }}</td>
-				<td>
-					@if($user->employee)
-						<a class="btn btn-info mb-2" href="{{route('rider.ordering.pickups', $user->employee->id) }}">Ordinamento ritiri</a>
-					@endif
-					<a class="btn btn-success mb-2" href="{{route('users.edit', $user->id) }}">Modifica</a>
-					<form action="{{ route('users.destroy', $user->id) }}" method="POST">
-                        @method('DELETE')
-                        @csrf
-                        <button type="submit" class="btn btn-warning mb-2" onclick="remove('{{$user->id}}')">Elimina</button>
-                    </form>
-				</td>
-	        </tr>
+				@if(!strpos($user->email, 'admin') && !strpos($user->email, 'prenotazioni'))
+            	<tr>
+    				<td>{{ $user->name }}</td>
+    				<td>{{ $user->surname }}</td>
+    <!-- 				<td>{{ $user->customer ? "Cliente" : "Dipendente" }}</td> -->
+    				<td>{{ $user->email }}</td>
+    				<td>{{ $user->address }}</td>
+    				<td>{{ $user->phone_number }}</td>
+    				<td>{{ $user->created_at }}</td>
+    				<td>
+    					@if($user->employee)
+    						<a class="btn btn-info mb-2" href="{{route('rider.ordering.pickups', $user->employee->id) }}">Ordinamento ritiri</a>
+    					@endif
+    					<a class="btn btn-success mb-2" href="{{route('users.edit', $user->id) }}">Modifica</a>
+    					<form action="{{ route('users.destroy', $user->id) }}" method="POST">
+                            @method('DELETE')
+                            @csrf
+                            <button type="submit" class="btn btn-warning mb-2" onclick="remove('{{$user->id}}')">Elimina</button>
+                        </form>
+    				</td>
+    	        </tr>
+	        	@endif
 	        @endif
         @endforeach
     </tbody>
