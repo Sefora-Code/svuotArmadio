@@ -37,7 +37,7 @@
     <tbody>
 		@foreach($users as $user)
 			@if((Route::is('customers') && $user->customer) || (Route::is('riders') && !$user->customer)) 
-				@if(!strpos($user->email, 'admin') && !strpos($user->email, 'prenotazioni'))
+				@if(!strpos($user->email, 'admin') && !strpos($user->email, 'enotazioni'))
             	<tr>
     				<td>{{ $user->name }}</td>
     				<td>{{ $user->surname }}</td>
