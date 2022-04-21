@@ -45,7 +45,7 @@
 			
 			<div class="input-group mb-3">
 				<div class="input-group-prepend">
-			    	<span class="input-group-text" id="volumeLabel">Volume</span>
+			    	<span class="input-group-text" id="volumeLabel">Quantit&agrave;</span>
 			  	</div>
 			  	<input type="number" class="form-control" name="volume" aria-describedby="volumeLabel" placeholder="solo valori interi" required>
 			</div>
@@ -79,11 +79,11 @@
 <table id="ordersTable" class="display">
     <thead>
         <tr>
-            <th>Ciente</th>
+            <th>Cliente</th>
             <th>Stato</th>
             <th>Assegnato a</th>
             <th>Indirizzo</th>
-            <th>Volume</th>
+            <th>Quantit&agrave;</th>
             <th>Data ritiro</th>
             <th>Creato il</th>
             <th>Note</th>
@@ -119,6 +119,8 @@
 				<td>{{ $order->employee ? $order->employee->user->name.' '.$order->employee->user->surname : '-'}}</td>
 				<td>{{ $order->orderDetails->shipping_address }}</td>
 				<td>
+				{{ $order->orderDetails->volume }} sacchetti
+				{{--
 				@switch($order->orderDetails->volume)
 					@case(1)
 					@case(2)
@@ -129,8 +131,9 @@
 						2 - 4 Sacchetti
 						@break 
 				@endswitch
+				--}}
 				</td>
-				<td>{{ $order->orderDetails->pickup_date }}</td>
+				<td>{{ date("d/m/Y", strtotime($order->orderDetails->pickup_date)) }}</td>
 				<td>{{ $order->created_at }}</td>
 				<td>{{ $order->orderDetails->notes }}</td>
 				<td>
@@ -144,9 +147,11 @@
     					<select class="mb-2">
     						<option selected></option>
                     		@foreach($employees as $employee)
+                    			@if(!strpos($employee->user->email, 'admin') && !strpos($employee->user->email, 'enotazioni'))
                         		<option value="{{$employee->id}}">
                         			{{$employee->user->name.' '.$employee->user->surname}}
                         		</option>
+                        		@endif
                             @endforeach>
     					</select>
 						<button class="btn btn-success" onclick="confirmEmployee(this, '{{$order->id}}')">Conferma</button>

@@ -16,6 +16,14 @@
 			<div class="row">
 				<div class="col-lg-12">
 					<div class="row mb-2">
+						<div class="col text-right"><b>Cliente:</b></div>
+						<div class="col">{{ $order->customer->user->name.' '.$order->customer->user->surname }}</div>
+					</div>
+					<div class="row mb-2">
+						<div class="col text-right"><b>Telefono:</b></div>
+						<div class="col">{{ $order->customer->user->phone_number }}</div>
+					</div>
+					<div class="row mb-2">
 						<div class="col text-right"><b>Indirizzo:</b></div>
 						<div class="col">{{ $order->orderDetails->shipping_address }}</div>
 					</div>
@@ -24,7 +32,7 @@
 						<div class="col">1-5Kg</div>
 					</div -->
 					<div class="row mb-2">
-						<div class="col text-right"><b>Volume:</b></div>
+						<div class="col text-right"><b>Quantit&agrave;:</b></div>
 						<div class="col">1-{{$order->orderDetails->volume}} Sacchetti</div>
 					</div>
 					<div class="row mb-2">
@@ -45,7 +53,7 @@
 					</div>
 					<div class="row mb-5">
 						<div class="col text-right">Data del ritiro:</div>
-						<div class="col">{{ date("d / m / Y", strtotime($order->orderDetails->pickup_date)) }} - {{ $order->orderDetails->time_frame }}</div>
+						<div class="col">{{ date("d / m / Y", strtotime($order->orderDetails->pickup_date)) }} {{-- $order->orderDetails->time_frame --}}</div>
 					</div>
 					
 				</div>

@@ -19,7 +19,8 @@
 <!-- 						<th scope="col">Ritiro</th> -->
 <!-- 						<th scope="col">Data Prenotazione</th> -->
 <!-- 						<th scope="col">Data ritiro</th> -->
-						<th scope="col">Fascia oraria</th>
+<!-- 						<th scope="col">Fascia oraria</th> -->
+						<th scope="col">Cliente</th>
 						<th scope="col" class="text-center">Indirizzo Ritiro</th>
 						<th scope="col" class="text-center">Sequenza</th>
 <!-- 						<th scope="col">Stato</th> -->
@@ -33,7 +34,8 @@
 <!--     						<th scope="row"><a href="{{route('pickups-detail-emp', $order->id)}}">{{$order->id}}</a></th> -->
 <!--     						<td>{{ date("d / m / Y", strtotime($order->created_at)) }}</td> -->
 <!--     						<td>{{ date("d / m / Y", strtotime($order->orderDetails->pickup_date)) }}</td> -->
-    						<td>{{ $order->orderDetails->time_frame }}</td>
+<!--     						<td>{{ $order->orderDetails->time_frame }}</td> -->
+    						<td>{{ $order->customer->user->name.' '.$order->customer->user->surname }}</td>
     						<td>{{ $order->orderDetails->shipping_address }}</td>
     						<td class="text-center font-weight-bold">{{ $order->seq_number }}</td>
 <!--     						<td>
