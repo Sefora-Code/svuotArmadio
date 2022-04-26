@@ -147,7 +147,7 @@
     					<select class="mb-2">
     						<option selected></option>
                     		@foreach($employees as $employee)
-                    			@if(!strpos($employee->user->email, 'admin') && !strpos($employee->user->email, 'enotazioni'))
+                    			@if($employee->user && !strpos($employee->user->email, 'admin') && !strpos($employee->user->email, 'enotazioni'))
                         		<option value="{{$employee->id}}">
                         			{{$employee->user->name.' '.$employee->user->surname}}
                         		</option>
