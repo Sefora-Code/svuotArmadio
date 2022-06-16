@@ -29,7 +29,8 @@ Route::get('/customers', [UsersController::class, 'index'])->name('customers');
 Route::get('/riders', [UsersController::class, 'index'])->name('riders');
 Route::get('/rider-orders/{id}', [OrdersController::class, 'showTodayUserOrders'])->name('rider.ordering.pickups');
 Route::get('/orders', [OrdersController::class, 'index'])->name('orders');
-    
+Route::get('/pick_up_phone', [HomeController::class, 'phone'])->name('pick_up_phone');
+
 Route::post('/assign-order', [OrdersController::class, 'assign'])->name('order.assign');
 Route::post('/accept-order', [OrdersController::class, 'accept'])->name('order.accept');
 Route::post('/reject-order', [OrdersController::class, 'reject'])->name('order.reject');

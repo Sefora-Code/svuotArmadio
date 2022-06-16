@@ -280,6 +280,12 @@ return [
             'icon' => 'fas fa-fw fa-tshirt',
             'icon_color' => 'primary',
         ],
+        [
+            'text' => 'pick_up_phone',
+            'url'  => 'pick_up_phone',
+            'icon' => 'fas fa-fw fa-phone',
+            'icon_color' => 'primary',
+        ],
 //         [
 //             'text' => 'profile',
 //             'url'  => 'admin/settings',

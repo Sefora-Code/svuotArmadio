@@ -17,4 +17,5 @@ return [
     'warning'                       => 'Warning',
     'information'                   => 'Information',
     'show_orders'                   => 'Ordini',
+    'pick_up_phone'                 => 'Rispondi a telefono',
 ];
