@@ -393,4 +393,67 @@ class OrdersController extends Controller
         
         return $obj;
     }
+    
+    
+    // an array of italian bank holidays
+    public $feste = Array(
+        '01-01',
+        '06-01',
+        '25-04',
+        '01-05',
+        '02-06',
+        '15-08',
+        '01-11',
+        '08-12',
+        '25-12',
+        '26-12'
+    ); 
+    
+    /**
+     * add more bank holidays to the given array 
+     */
+    public function calculateItalianEasterHolidays()
+    {
+        $anno = date('Y');
+        
+        // calcolo le date di Pasqua e Pasquetta
+        $gg_pasqua = easter_days($anno);
+        $gg_pasquetta = $gg_pasqua+1;
+        $tmp = date('Y-m-d', strtotime('21 march ' . $anno));
+        $data_pasqua = date('d-m', strtotime($tmp . ' +' . $gg_pasqua . 'day'));
+        $data_pasquetta = date('d-m', strtotime($tmp . ' +' . $gg_pasquetta . 'day'));
+        
+        // aggiungo le date di Pasqua e Pasquetta nel nostro elenco di festività
+        $this->feste[] = $data_pasqua;
+        $this->feste[] = $data_pasquetta;
+    }
+    
+    /**
+     * check whether the user date is a bank holiday
+     * @param Request $request
+     * @return number 1 in case of bank holiday or -1 if not
+     */
+    public function isBankHoliday(Request $request)
+    {
+        // first calculate full list of italian bank holidays
+        $this->calculateItalianEasterHolidays();
+        
+        // get the date as month-day formatted as 05-27
+        $userDate = date('d-m', strtotime($request->d));
+                
+        // loop trough the array of bank holidays checking if our date belongs to it
+        foreach($this->feste as $d)
+        {
+            if ($d == $userDate)
+                return 1;
+        }
+        
+        return -1;
+    }
+
+    public function verifyTimeSlot(Request $request)
+    {
+        
+    }
+    
 }

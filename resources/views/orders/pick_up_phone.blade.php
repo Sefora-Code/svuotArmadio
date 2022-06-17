@@ -1,3 +1,12 @@
+
+@php
+	date_default_timezone_set('Europe/Rome');
+	
+
+    setlocale(LC_TIME, 'ita', 'it_IT.utf8');
+
+@endphp
+					
 @extends('adminlte::page')
 
 @section('title', 'Crea utente')
@@ -288,21 +297,20 @@
             	<p>In che giorno preferisce che si effettui il ritiro?</p>
             </div>	
             <div class="col-4">
-                <div class="input-group mb-3">
-                    <input type="date" name="day"
-                           class="form-control"
-                           value="" placeholder=""/>
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-calendar {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                        </div>
-                    </div>
-                    @if($errors->has('day'))
-                        <div class="invalid-feedback">
-                            <strong>{{ $errors->first('day') }}</strong>
-                        </div>
-                    @endif
-                </div>
+				<div id="date_block" class="row text-center mb-3">				
+                    <div class="col-4" onclick="prevDay();" style="cursor:pointer; font-size:50px; padding-top: 20px;">
+        				<i class="fas fa-arrow-left"></i>
+                    </div>	
+                    <div class="col-4" id="selectedDate" style="border: 1px solid #ccc; border-radius: 5px;">
+    					<div id="month"></div>
+    					<div id="day" style="font-size: 40px;"></div>
+    					<div id="year"></div>                    	
+                    </div>	
+                    <div class="col-4" onclick="nextDay();" style="cursor:pointer; font-size:50px; padding-top: 20px;">
+                    	<i class="fas fa-arrow-right"></i>
+					</div>
+				</div>
+                <input type="hidden" name="date" value="" id="dateInput" />
             </div>	
         </div>        
         
@@ -315,26 +323,23 @@
             	<p>In che orario preferisce che si effettui il ritiro?</p>
             </div>	
             <div class="col-4">
-                <div class="input-group mb-3">
-                    <input type="time" name="time"
-                           class="form-control"
-                           value="" placeholder=""/>
-                    <div class="input-group-append">
-                        <div class="input-group-text">
-                            <span class="fas fa-clock {{ config('adminlte.classes_auth_icon', '') }}"></span>
-                        </div>
-                    </div>
-                    @if($errors->has('time'))
-                        <div class="invalid-feedback">
-                            <strong>{{ $errors->first('time') }}</strong>
-                        </div>
-                    @endif
-                </div>
+				<div id="date_block" class="row text-center mb-3">				
+                    <div class="col-4" onclick="prevTime();" style="cursor:pointer; font-size:50px;">
+        				<i class="fas fa-arrow-left"></i>
+                    </div>	
+                    <div class="col-4 mt-2" id="selectedTime" style="border: 1px solid #ccc; border-radius: 5px;">
+    					<div id="time" style="font-size: 40px;"></div>
+                    </div>	
+                    <div class="col-4" onclick="nextTime();" style="cursor:pointer; font-size:50px;">
+                    	<i class="fas fa-arrow-right"></i>
+					</div>
+				</div>
+                <input type="hidden" name="date" value="" id="hourInput" />
             </div>	
         </div>        
 
        
-        {{-- simple info --}}
+        {{-- rider --}}
         <div class="row">
             <div class="col-3">
 				<p>Rider</p>            	
@@ -358,10 +363,10 @@
             </div>	
         </div>
        
-<br><br>
+		<br><br>
 
         {{-- Register button --}}
-        <button type="submit"
+        <button type="submit" id="submitBtn"
                 id="btn-send"
                 class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
             <span class="fas fa-user-plus"></span>
@@ -372,5 +377,131 @@
 @stop
 
 @section('js')
+<script>
 
+	var chosenDate = new Date();
+	showDate();
+	verifyBankHoliday();
+
+	var timeSlots = ['10:15','10:30','10:45','11:00','11:15','11:30'];
+	var chosenTime = 0;
+	showTime();
+	verifyAvailability();
+		
+	function showDate()
+	{    
+     	document.getElementById("day").innerHTML = chosenDate.getDate();
+     	document.getElementById("month").innerHTML = getItMonth(chosenDate.getMonth());
+     	//TODO show day's name
+     	document.getElementById("year").innerHTML = chosenDate.getFullYear();
+	}
+ 	
+	function getItMonth(month)
+	{
+		if (month == 0) return "Gennaio";
+		if (month == 1) return "Febbraio";
+		if (month == 2) return "Marzo";
+		if (month == 3) return "Aprile";
+		if (month == 4) return "Maggio";
+		if (month == 5) return "Giugno";
+		if (month == 6) return "Luglio";
+		if (month == 7) return "Agosto";
+		if (month == 8) return "Settembre";
+		if (month == 9) return "Ottobre";
+		if (month == 10) return "Novembre";
+		if (month == 11) return "Dicembre";
+	}
+
+	function showTime()
+	{    
+     	document.getElementById("time").innerHTML = timeSlots[chosenTime];
+	}
+
+	function prevDay()
+	{
+		chosenDate.setDate(chosenDate.getDate()-1);
+		showDate();
+		verifyBankHoliday();
+	}
+
+	function nextDay()
+	{
+		chosenDate.setDate(chosenDate.getDate()+1);
+		showDate();
+		verifyBankHoliday();
+	}
+
+	function verifyBankHoliday()
+	{
+		if (chosenDate.getDay() == 0 || chosenDate.getDay() == 6) // saturday or sunday
+		{
+			document.getElementById("selectedDate").style.background = "#ff8f8f";
+	    	document.getElementById("dateInput").value = "";
+		    evaluateForm();
+		}
+		else // check on server
+		{
+    		let formattedDate = chosenDate.getFullYear()+"-"+(chosenDate.getMonth()+1)+"-"+chosenDate.getDate();
+    		fetch("{{ route('is_bank_holiday') }}?d="+formattedDate, {method: 'GET' })
+        	.then(res => res.text())
+    	    .then(response =>
+    	    {
+    		    if (response == "-1") // working day
+    		    {
+    		    	document.getElementById("selectedDate").style.background = "#a5f7a6";
+    		    	document.getElementById("dateInput").value = formattedDate;
+    		    }
+    		    else
+    		    {
+    		    	document.getElementById("selectedDate").style.background = "#ff8f8f";
+    		    	document.getElementById("dateInput").value = "";
+    		    }
+    		    evaluateForm();
+    	    })
+            .catch((error) => alert("Errore nel reperire il giorno festivo: "+ error));
+		}
+	}
+
+
+	function prevTime()
+	{
+		if (chosenTime == 0) return; // stop there
+		
+		chosenTime--;
+		showTime();
+		verifyAvailability();
+	}
+
+	function nextTime()
+	{
+		if (chosenTime == 5) return; // stop there
+		
+		chosenTime++;
+		showTime();
+		verifyAvailability();
+	}
+
+	function verifyAvailability()
+	{
+		if (document.getElementById("dateInput").value != "")
+		{
+			// fetch 	verifyTimeSlot
+		}
+		
+	 	evaluateForm();
+	}
+	
+
+	
+	function evaluateForm()
+	{
+		let d = document.getElementById("dateInput").value;
+		let h = document.getElementById("hourInput").value;
+		if (d != "" && h != "")
+			document.getElementById("submitBtn").disabled = false;
+		else
+			document.getElementById("submitBtn").disabled = true;
+	}
+	
+</script>
 @stop

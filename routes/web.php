@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomersController;
 use App\Http\Controllers\FrontPageController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrdersController;
@@ -56,3 +57,7 @@ Route::get('/pickups-detail-emp/{id}', [OrdersController::class, 'showDetailEmp'
 Route::get('/pickups-get-today/{empId}', [OrdersController::class, 'getTodayUserOrders'])->name('pickups-get-today');
 
 Route::get('/update_order_status', [OrdersController::class, 'UpdateOrderStatus'])->name('update.order.status');
+
+Route::get('/is_bank_holiday', [OrdersController::class, 'isBankHoliday'])->name('is_bank_holiday');
+Route::get('/timeslot_available', [OrdersController::class, 'verifyTimeSlot'])->name('timeslot_available');
+
