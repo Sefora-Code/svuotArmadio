@@ -451,9 +451,25 @@ class OrdersController extends Controller
         return -1;
     }
 
+    /**
+     * Check if another order in the same date and timeframe exists
+     * @param Request $request
+     * @return number 1 in case it exists (so we can't proceed), -1 in case no order exists (and we can proceed)
+     */
     public function verifyTimeSlot(Request $request)
     {
-        
+        $timeslot = str_replace("|", ":", $request->t); // replace the pipe here - id the opposite of what was done on the client
+        $date = $request->d." 00:00:00";
+        $order = OrderDetail::where('pickup_date', $date)->where('time_frame', $timeslot)->first();
+        Log::info("Trovato: ".json_encode($order));
+        if ($order)
+        {
+            return 1;
+        }
+        else 
+        {
+            return -1;
+        }
     }
     
 }

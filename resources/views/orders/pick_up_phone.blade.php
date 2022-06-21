@@ -9,10 +9,17 @@
 					
 @extends('adminlte::page')
 
-@section('title', 'Crea utente')
+@section('title', 'Quando rispondi al telefono')
 
 @section('css')
-    
+    <style>
+        .cell-yellow{background-color: #f9fce0;}
+        .cell-cyan{background-color: #e0fbfc;}
+        .times{cursor:pointer;}
+        .times:hover{background-color: #fce0fa;}
+        .selectedTimeSlot{background-color: #19c12f !important; }
+        .slotUnavailable{background-color: #FF8F8F !important; cursor: default;}
+    </style>
 @stop
 
 
@@ -108,7 +115,7 @@
                 <div class="input-group mb-3">
                     <input type="text" name="more_details"
                            class="form-control "
-                           value="" placeholder=""
+                           value="" placeholder="Nome sul campanello"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -164,7 +171,7 @@
                 <div class="input-group mb-3">
                     <input type="text" name="address"
                            class="form-control "
-                           value="" placeholder=""
+                           value="" placeholder="Via e numero civico"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -190,9 +197,9 @@
             </div>	
             <div class="col-4">
                 <div class="input-group mb-3">
-                    <input type="text" name="phone"
+                    <input type="number" name="phone"
                            class="form-control "
-                           value="" placeholder=""
+                           value="" placeholder="Numero di telefono senza spazi"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -258,9 +265,9 @@
             </div>	
             <div class="col-4">
                 <div class="input-group mb-3">
-                    <input type="email" name="volume"
+                    <input type="number" name="volume"
                            class="form-control"
-                           value="" placeholder=""/>
+                           value="" placeholder="Numero sacchi da 1 a 5"/>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-shopping-bag {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -302,8 +309,9 @@
         				<i class="fas fa-arrow-left"></i>
                     </div>	
                     <div class="col-4" id="selectedDate" style="border: 1px solid #ccc; border-radius: 5px;">
+    					<div id="dayName"></div>
+    					<div id="day" style="font-size: 40px; margin: -15px 0;"></div>
     					<div id="month"></div>
-    					<div id="day" style="font-size: 40px;"></div>
     					<div id="year"></div>                    	
                     </div>	
                     <div class="col-4" onclick="nextDay();" style="cursor:pointer; font-size:50px; padding-top: 20px;">
@@ -374,25 +382,33 @@
         </button>
     </form>
 
+
+@include('orders.calendar')
+
+
 @stop
+
 
 @section('js')
 <script>
 
-	var chosenDate = new Date();
-	showDate();
-	verifyBankHoliday();
-
+	var daysName = ["Domenica", "Luned&igrave;","Marted&igrave;", "Mercoled&igrave;", "Gioved&igrave;", "Venerd&igrave;", "Sabato"];
 	var timeSlots = ['10:15','10:30','10:45','11:00','11:15','11:30'];
+	var chosenDate = new Date();
 	var chosenTime = 0;
+
+	showDate();
+	verifyBankHoliday(chosenDate);
 	showTime();
 	verifyAvailability();
+
+	populateCalendar(); // to populate the bottom calendar -> see calendar.blade.php for details 
 		
 	function showDate()
 	{    
      	document.getElementById("day").innerHTML = chosenDate.getDate();
      	document.getElementById("month").innerHTML = getItMonth(chosenDate.getMonth());
-     	//TODO show day's name
+     	document.getElementById("dayName").innerHTML = daysName[chosenDate.getDay()];
      	document.getElementById("year").innerHTML = chosenDate.getFullYear();
 	}
  	
@@ -421,19 +437,19 @@
 	{
 		chosenDate.setDate(chosenDate.getDate()-1);
 		showDate();
-		verifyBankHoliday();
+		verifyBankHoliday(chosenDate);
 	}
 
 	function nextDay()
 	{
 		chosenDate.setDate(chosenDate.getDate()+1);
 		showDate();
-		verifyBankHoliday();
+		verifyBankHoliday(chosenDate);
 	}
 
-	function verifyBankHoliday()
+	function verifyBankHoliday(dateToCheck)
 	{
-		if (chosenDate.getDay() == 0 || chosenDate.getDay() == 6) // saturday or sunday
+		if (dateToCheck.getDay() == 0 || dateToCheck.getDay() == 6) // saturday or sunday
 		{
 			document.getElementById("selectedDate").style.background = "#ff8f8f";
 	    	document.getElementById("dateInput").value = "";
@@ -441,7 +457,7 @@
 		}
 		else // check on server
 		{
-    		let formattedDate = chosenDate.getFullYear()+"-"+(chosenDate.getMonth()+1)+"-"+chosenDate.getDate();
+    		let formattedDate = dateToCheck.getFullYear()+"-"+(dateToCheck.getMonth()+1)+"-"+dateToCheck.getDate();
     		fetch("{{ route('is_bank_holiday') }}?d="+formattedDate, {method: 'GET' })
         	.then(res => res.text())
     	    .then(response =>
@@ -450,6 +466,7 @@
     		    {
     		    	document.getElementById("selectedDate").style.background = "#a5f7a6";
     		    	document.getElementById("dateInput").value = formattedDate;
+    		    	verifyAvailability();
     		    }
     		    else
     		    {
@@ -485,7 +502,30 @@
 	{
 		if (document.getElementById("dateInput").value != "")
 		{
-			// fetch 	verifyTimeSlot
+			let formattedDate = chosenDate.getFullYear()+"-"+(chosenDate.getMonth()+1)+"-"+chosenDate.getDate();
+			let timeslot = timeSlots[chosenTime].replace(":", "|"); // replace the colon here - but need to do the opposite on the server
+    		fetch("{{ route('timeslot_available') }}?d="+formattedDate+"&t="+timeslot, {method: 'GET' })
+        	.then(res => res.text())
+    	    .then(response =>
+    	    {
+    		    if (response == "-1") // time slot available
+    		    {
+    		    	document.getElementById("selectedTime").style.background = "#a5f7a6";
+    		    	document.getElementById("hourInput").value = timeSlots[chosenTime];
+    		    }
+    		    else
+    		    {
+    		    	document.getElementById("selectedTime").style.background = "#ff8f8f";
+    		    	document.getElementById("hourInput").value = "";
+    		    }
+    		    evaluateForm();
+    	    })
+            .catch((error) => alert("Errore nel reperire il ordini per quell'orario: "+ error));
+		}
+		else
+		{
+	    	document.getElementById("selectedTime").style.background = "#ff8f8f";
+	    	document.getElementById("hourInput").value = "";
 		}
 		
 	 	evaluateForm();
