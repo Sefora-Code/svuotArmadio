@@ -47,7 +47,7 @@
 				<div class="input-group-prepend">
 			    	<span class="input-group-text" id="volumeLabel">Quantit&agrave;</span>
 			  	</div>
-			  	<input type="number" class="form-control" name="volume" aria-describedby="volumeLabel" placeholder="solo valori interi" required>
+			  	<input type="number" class="form-control" name="volume" aria-describedby="volumeLabel" placeholder="Numero sacchi da 1 a 5" min="1" max="5" required>
 			</div>
 		
 		
@@ -56,6 +56,20 @@
 			    	<span class="input-group-text" id="basic-addon3">Data ritiro</span>
 			  	</div>
 			  	<input type="date" class="form-control" name="date" aria-describedby="basic-addon3" required>
+			</div>
+		
+			<div class="input-group mb-3">
+				<div class="input-group-prepend">
+			    	<span class="input-group-text" id="basic-addon4">Fascia oraria</span>
+			  	</div>
+			  	<select class="form-control" name="time" aria-describedby="basic-addon4" required>
+			  		<option value="10:15">10:15</option>
+			  		<option value="10:30">10:30</option>
+			  		<option value="10:45">10:45</option>
+			  		<option value="11:00">11:00</option>
+			  		<option value="11:15">11:15</option>
+			  		<option value="11:30">11:30</option>
+			  	</select>
 			</div>
 		
 		
@@ -140,8 +154,7 @@
 				@if($order->status == 0)
 					<button class="btn btn-success mb-2" onclick="accept('{{$order->id}}')">Accetta</button>
 					<button class="btn btn-warning mb-2" onclick="reject('{{$order->id}}')">Rifiuta</button>
-				@endif
-				@if($order->status == 1)
+				@elseif($order->status == 1)
 					<button class="btn btn-info mb-2" onclick="showAssignEmployee(this)">Assegna</button>
 					<span class="d-none">
     					<select class="mb-2">
@@ -156,6 +169,9 @@
     					</select>
 						<button class="btn btn-success" onclick="confirmEmployee(this, '{{$order->id}}')">Conferma</button>
 					</span>
+				@endif
+				@if($order->status < 4)
+					<button class="btn btn-primary mb-2" onclick="window.location.href='{{route('edit.phone.order', $order->orderDetails->id) }}'">Modifica</button>
 				@endif
 				</td>
 	        </tr>

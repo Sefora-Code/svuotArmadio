@@ -52,7 +52,7 @@ class UsersController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'phone_number' => ['nullable', 'string', 'max:10'],
-            'address' => ['nullable', 'string', 'max:50']
+            'address' => ['nullable', 'string', 'max:100']
         ]);
         
         // process the login
@@ -62,6 +62,10 @@ class UsersController extends Controller
                             ->withErrors($validator)
                             ->withInput();
         }
+        
+        // make sure the city name is specified
+        if (!stripos($data['address'], 'parma'))
+            $data['address'] = $data['address'] . " Parma";
         
         $user = User::create([
             'name' => $data['name'],

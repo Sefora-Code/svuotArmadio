@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Employee;
@@ -125,6 +126,122 @@ class OrdersController extends Controller
         return redirect()->back()->with('success', 'Ritiro salvato correttamente');
     }
 
+    public function storeAdminPhoneOrder(Request $request)
+    {
+        $selectedCustomer = null;
+        // firstly create the customer
+        if ($request->has('email'))
+        {
+            // check if already exists
+            $thisUser = User::where('email', $request->email)->first();
+            if (!$thisUser) // no it's a new user - store it
+            {
+                $uc = new UsersController();
+                $result = $uc->store($request);
+                if(Session::has('error')) // in case of errors with the form get back to the user
+                    return $result;
+                else
+                    $thisUser = User::where('email', $request->email)->first();
+            }
+            $selectedCustomer = Customer::where('user_id', $thisUser->id)->first();
+        }
+        else 
+        {
+            return redirect()->back()->with('error', 'Indirizzo Email mancante!');  
+        }
+        
+        if (!$request->has('volume'))
+        {
+            return redirect()->back()->with('error', 'Volume Mancante!');
+        }
+        else if (!$request->has('date'))
+        {
+            return redirect()->back()->with('error', 'Data di ritiro mancante');
+        }
+        else
+        {
+            $customer = $selectedCustomer;
+            $order = new Order();
+            $order->status = 3;
+            $order->customer_id = $selectedCustomer->id;
+            $order->assigned_to = $request->rider;
+            $order->assigned_by = Auth::user()->id;
+            $order->save();
+            
+            $orderDetails = new OrderDetail();
+            $orderDetails->order_id = $order->id;
+            $orderDetails->shipping_address = $customer->user->address;
+            $orderDetails->pickup_date = $request->date;
+            $orderDetails->time_frame = $request->time;
+            $orderDetails->volume = $request->volume;
+            $orderDetails->notes = "";
+            if ($request->has('more_details')) // not mandatory
+                $orderDetails->notes .= "nome sul campanello: ".$request->more_details." - ";
+            if ($request->has('more_details2')) // not mandatory
+                $orderDetails->notes .= "bisogna salire al piano o raccogliere i sacchi al portone: ".$request->more_details2;
+            $orderDetails->save();
+        }
+        
+        return redirect()->back()->with('success', 'Ritiro salvato correttamente');
+    }
+    
+    public function updateAdminPhoneOrder(Request $request)
+    {
+        $selectedCustomer = null;
+        // firstly create the customer
+        if ($request->has('email'))
+        {
+            // check if already exists
+            $thisUser = User::where('email', $request->email)->first();
+            if (!$thisUser) // no it's a new user - store it
+            {
+                $uc = new UsersController();
+                $result = $uc->store($request);
+                if(Session::has('error')) // in case of errors with the form get back to the user
+                    return $result;
+                else
+                    $thisUser = User::where('email', $request->email)->first();
+            }
+            $selectedCustomer = Customer::where('user_id', $thisUser->id)->first();
+        }
+        else
+        {
+            return redirect()->back()->with('error', 'Indirizzo Email mancante!');
+        }
+        
+        if (!$request->has('volume'))
+        {
+            return redirect()->back()->with('error', 'Volume Mancante!');
+        }
+        else if (!$request->has('date'))
+        {
+            return redirect()->back()->with('error', 'Data di ritiro mancante');
+        }
+        else
+        {
+            $customer = $selectedCustomer;
+            
+            $orderDetails = OrderDetail::find($request->order_details_id);
+            $orderDetails->shipping_address = $customer->user->address;
+            $orderDetails->pickup_date = $request->date;
+            $orderDetails->time_frame = $request->time;
+            $orderDetails->volume = $request->volume;
+            $orderDetails->notes = "";
+            if ($request->has('more_details')) // not mandatory
+                $orderDetails->notes .= "nome sul campanello: ".$request->more_details." - ";
+            if ($request->has('more_details2')) // not mandatory
+                $orderDetails->notes .= "bisogna salire al piano o raccogliere i sacchi al portone: ".$request->more_details2;
+            $orderDetails->save();
+            
+            $order = Order::find($orderDetails->order_id);
+            $order->customer_id = $selectedCustomer->id;
+            $order->assigned_to = $request->rider;
+            $order->assigned_by = Auth::user()->id;
+            $order->save();
+        }
+        
+        return redirect()->back()->with('success', 'Ritiro salvato correttamente');
+    }
     
     public function storeCustomerOrder(Request $request)
     {
@@ -225,6 +342,18 @@ class OrdersController extends Controller
     }
     
     
+    public function editAdminPhoneOrder($id)
+    {
+        $thisUser = Auth::user();
+        $newOrderDetail = OrderDetail::find($id);
+        $newOrder = Order::find($newOrderDetail->order_id);
+        $employees = Employee::get();
+        $customer = Customer::find($newOrder->customer_id);
+        $user = User::find($customer->user_id);
+        
+        return view('orders.pick_up_phone', compact('thisUser', 'newOrderDetail', 'newOrder', 'employees', 'user'));
+    }
+    
     /**
      * Update the specified resource in storage.
      * This is intended to be performed only by customers
@@ -279,8 +408,6 @@ class OrdersController extends Controller
     {
         $obj = new \stdClass();
         
-        Log::info("OrdersController :: ".json_encode($request->orders));
-        
         // TODO code to store pickup orders
         foreach ($request->orders as $pickup) 
         {
@@ -333,7 +460,7 @@ class OrdersController extends Controller
             if($order->orderDetails->pickup_date == date('Y-m-d 00:00:00'))
             {
                 $encodedAddress = urlencode($order->orderDetails->shipping_address);
-                Log::info("Encoded Address :: ".$encodedAddress);
+                
                 $obj = new \stdClass();
                 $obj->order = $order;
                 
@@ -461,7 +588,7 @@ class OrdersController extends Controller
         $timeslot = str_replace("|", ":", $request->t); // replace the pipe here - id the opposite of what was done on the client
         $date = $request->d." 00:00:00";
         $order = OrderDetail::where('pickup_date', $date)->where('time_frame', $timeslot)->first();
-        Log::info("Trovato: ".json_encode($order));
+        
         if ($order)
         {
             return 1;

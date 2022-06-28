@@ -38,6 +38,9 @@ Route::post('/reject-order', [OrdersController::class, 'reject'])->name('order.r
 Route::post('/store-order', [OrdersController::class, 'storeAdminOrder'])->name('store.order');
 Route::post('/pickups-ordering', [OrdersController::class, 'confirmPickupsOrdering'])->name('pickups.ordering.confirm');
 Route::get('/customers/info', [CustomersController::class, 'index'])->name('informations');
+Route::post('/store-phone-order', [OrdersController::class, 'storeAdminPhoneOrder'])->name('store.phone.order');
+Route::post('/update-phone-order', [OrdersController::class, 'updateAdminPhoneOrder'])->name('update.phone.order');
+Route::get('/edit-phone-order/{id}', [OrdersController::class, 'editAdminPhoneOrder'])->name('edit.phone.order');
 
 Route::get('/front-home', [FrontPageController::class, 'index'])->name('front-home');
 Route::post('/update-user', [UsersController::class, 'update'])->name('save-user-data');

@@ -12,14 +12,7 @@
 @section('title', 'Quando rispondi al telefono')
 
 @section('css')
-    <style>
-        .cell-yellow{background-color: #f9fce0;}
-        .cell-cyan{background-color: #e0fbfc;}
-        .times{cursor:pointer;}
-        .times:hover{background-color: #fce0fa;}
-        .selectedTimeSlot{background-color: #19c12f !important; }
-        .slotUnavailable{background-color: #FF8F8F !important; cursor: default;}
-    </style>
+
 @stop
 
 
@@ -29,8 +22,14 @@
 
 @section('content')
 	<br><br>
-    <form id="new-user-form" action="{{ route('users.store') }}" method="post" class="mb-0">
+    <form id="new-phone-order-form" action="{{ isset($newOrderDetail) ? route('update.phone.order') : route('store.phone.order') }}" method="post" class="mb-0">
         {{ csrf_field() }}
+        
+        @if (isset($newOrderDetail))
+        <!-- in case we are editing an order, send the id of the order details -->
+        <input type="hidden" name="order_details_id" value="{{$newOrderDetail->id}}" >
+        
+        @endif 
 
 		{{-- Header --}}
 		
@@ -71,7 +70,7 @@
                 <div class="input-group mb-3">
                     <input type="text" name="name"
                            class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}"
-                           value="{{ old('name') ?? '' }}" placeholder="{{ __('adminlte::adminlte.name') }}"
+                           value="{{ old('name') ?? (isset($user) ? $user->name : '' ) }}" placeholder="{{ __('adminlte::adminlte.name') }}"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -87,7 +86,7 @@
                 <div class="input-group mb-3">
                     <input type="text" name="surname"
                            class="form-control {{ $errors->has('surname') ? 'is-invalid' : '' }}"
-                           value="{{ old('surname') ?? '' }}" placeholder="{{ __('adminlte::adminlte.surname') }}"
+                           value="{{ old('surname') ?? (isset($user) ? $user->surname : '' ) }}" placeholder="{{ __('adminlte::adminlte.surname') }}"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -113,9 +112,16 @@
             </div>	
             <div class="col-4">
                 <div class="input-group mb-3">
+                @php
+                // get name on the ringbell (if any)
+                if (isset($newOrderDetail))
+                {
+                    $ringName = substr($newOrderDetail->notes, strrpos($newOrderDetail->notes,'lo:')+3, strrpos($newOrderDetail->notes,'-') - strrpos($newOrderDetail->notes,'lo:') - 3); 
+                }
+                @endphp
                     <input type="text" name="more_details"
                            class="form-control "
-                           value="" placeholder="Nome sul campanello"
+                           value="{{ isset($ringName) ? $ringName : '' }}" placeholder="Nome sul campanello"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -141,9 +147,16 @@
             </div>	
             <div class="col-4">
                 <div class="input-group mb-3">
-                    <input type="text" name="more_details"
+                 @php
+                // get notes (if any)
+                if (isset($newOrderDetail))
+                {
+                	$notes = substr(strrchr($newOrderDetail->notes,':'), 2); 
+                }
+                @endphp
+                    <input type="text" name="more_details2"
                            class="form-control "
-                           value="" placeholder=""
+                           value="{{ isset($notes) ? $notes : '' }}" placeholder=""
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -152,7 +165,7 @@
                     </div>
                     @if($errors->has('name'))
                         <div class="invalid-feedback">
-                            <strong>{{ $errors->first('more_details') }}</strong>
+                            <strong>{{ $errors->first('more_details2') }}</strong>
                         </div>
                     @endif
                 </div>
@@ -171,7 +184,7 @@
                 <div class="input-group mb-3">
                     <input type="text" name="address"
                            class="form-control "
-                           value="" placeholder="Via e numero civico"
+                           value="{{ old('address') ?? (isset($newOrderDetail) ? $newOrderDetail->shipping_address : '' ) }}" placeholder="Via e numero civico"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -197,9 +210,9 @@
             </div>	
             <div class="col-4">
                 <div class="input-group mb-3">
-                    <input type="number" name="phone"
+                    <input type="number" name="phone_number"
                            class="form-control "
-                           value="" placeholder="Numero di telefono senza spazi"
+                           value="{{ old('phone_number') ?? (isset($user) ? $user->phone_number : '' ) }}" placeholder="Numero di telefono senza spazi"
                            autofocus/>
                     <div class="input-group-append">
                         <div class="input-group-text">
@@ -227,7 +240,7 @@
                 <div class="input-group mb-3">
                     <input type="email" name="email"
                            class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                           value="{{ old('email') ?? '' }}" placeholder="{{ __('adminlte::adminlte.email') }}"/>
+                           value="{{ old('email') ?? (isset($user) ? $user->email : '' ) }}" placeholder="{{ __('adminlte::adminlte.email') }}"/>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -266,8 +279,8 @@
             <div class="col-4">
                 <div class="input-group mb-3">
                     <input type="number" name="volume"
-                           class="form-control"
-                           value="" placeholder="Numero sacchi da 1 a 5"/>
+                           class="form-control" min="1" max="5"
+                           value="{{ old('volume') ?? (isset($newOrderDetail) ? $newOrderDetail->volume : '' ) }}" placeholder="Numero sacchi da 1 a 5"/>
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-shopping-bag {{ config('adminlte.classes_auth_icon', '') }}"></span>
@@ -342,7 +355,7 @@
                     	<i class="fas fa-arrow-right"></i>
 					</div>
 				</div>
-                <input type="hidden" name="date" value="" id="hourInput" />
+                <input type="hidden" name="time" value="" id="hourInput" />
             </div>	
         </div>        
 
@@ -361,7 +374,11 @@
 						<option selected></option>
                 		@foreach($employees as $employee)
                 			@if($employee->user && !strpos($employee->user->email, 'admin') && !strpos($employee->user->email, 'enotazioni'))
-                    		<option value="{{$employee->id}}">
+                    		<option value="{{$employee->id}}"
+                    			@if(isset($newOrder) && $newOrder->assigned_to == $employee->id)
+                    				selected
+        						@endif                    		
+                    		>
                     			{{$employee->user->name.' '.$employee->user->surname}}
                     		</option>
                     		@endif
@@ -380,6 +397,9 @@
             <span class="fas fa-user-plus"></span>
             Assegna ordine
         </button>
+        <input type="hidden" name="password" value="12345678" />
+        <input type="hidden" name="password_confirmation" value="12345678" />
+        <input type="hidden" name="type" value="customer" />
     </form>
 
 
@@ -397,6 +417,23 @@
 	var chosenDate = new Date();
 	var chosenTime = 0;
 
+	// in case we are loading an order, prepopulate chosen date and chosen time
+    @if (isset($newOrderDetail))
+        // set the date
+    	@php
+    	$datetime = DateTime::createFromFormat('Y-m-d H:i:s', $newOrderDetail->pickup_date);
+		@endphp
+        chosenDate.setFullYear({{ $datetime->format('Y') }},{{ $datetime->format('m') }}-1,{{ $datetime->format('d') }});
+
+        // set the time
+        for (let i=0; i<timeSlots.length; i++)
+        {
+            if (timeSlots[i] == '{{ $newOrderDetail->time_frame }}')
+                chosenTime = i;
+        }
+        
+	@endif
+	
 	showDate();
 	verifyBankHoliday(chosenDate);
 	showTime();

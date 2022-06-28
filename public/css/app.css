@@ -10024,8 +10024,34 @@ html, body {
   font-weight: 400;
 }
 
+/* pick-up-phone and calendar views*/
 #selectedDate {
   font-size: 22px;
+}
+
+.cell-yellow {
+  background-color: #f9fce0;
+}
+
+.cell-cyan {
+  background-color: #e0fbfc;
+}
+
+.times {
+  cursor: pointer;
+}
+
+.times:hover {
+  background-color: #fce0fa;
+}
+
+.selectedTimeSlot {
+  background-color: #19c12f !important;
+}
+
+.slotUnavailable {
+  background-color: #FF8F8F !important;
+  cursor: default;
 }
 
 html {
