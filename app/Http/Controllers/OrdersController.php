@@ -165,7 +165,7 @@ class OrdersController extends Controller
             $order->status = 3;
             $order->customer_id = $selectedCustomer->id;
             $order->assigned_to = $request->rider;
-            $order->assigned_by = Auth::user()->id;
+            $order->assigned_by = Auth::user()->employee->id;
             $order->save();
             
             $orderDetails = new OrderDetail();
@@ -236,7 +236,7 @@ class OrdersController extends Controller
             $order = Order::find($orderDetails->order_id);
             $order->customer_id = $selectedCustomer->id;
             $order->assigned_to = $request->rider;
-            $order->assigned_by = Auth::user()->id;
+            $order->assigned_by = Auth::user()->employee->id;
             $order->save();
         }
         
